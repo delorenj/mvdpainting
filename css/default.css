@@ -107,13 +107,17 @@ input {
   width: 300px;
   margin-left: 670px;
   z-index: 1000;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  padding: 10px;  
 }
 
 #right p {
- font-family: 'Just Another Hand', serif;
-  font-size: 33px;
+ font-family: 'Bangers', 'Just Another Hand', serif;
+  font-size: 1.4em;
   font-style: normal;
-  font-weight: 700;
+  font-weight: normal;
   text-shadow: none;
   text-decoration: none;
   text-transform: none;
@@ -130,9 +134,22 @@ input {
 
 #right label {
   font-family: "bangers";
+  color: #F5F5F5;
   letter-spacing: 0.10em;
   word-spacing: 0.101em;
   line-height: 1.13;  
+}
+
+button {
+  margin-left: 5px;
+  width: 250px;
+  height: 35px;
+}
+
+select {
+  width: 250px;
+  min-width: 250px;
+  z-index: 100;
 }
 
 .container {
@@ -165,6 +182,10 @@ input {
   font-size: 0.8em;
   color: #F5F5F5;
   z-index: 10;
+}
+
+#footer img {
+  margin: 12px 15px;
 }
 
 #footer p {

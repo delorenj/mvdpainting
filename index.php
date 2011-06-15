@@ -38,9 +38,46 @@ $gen = new LoremIpsumGenerator;
             <p><span class="em"><?php echo $gen->getContent(1, "plain");?></span> <?php echo $gen->getContent(12, "plain");?></p>
           </div>
           <div id="right">
-            <p>Call for a free estimate</p>
-            <img src='images/bbb.png' height='45' alt='' /><br />
-            <img src='images/lead.png' height='60' alt='' />
+            <p>Schedule a free consultation</p>
+            <form action="schedule.php" method="POST">
+              <div class="field">
+                <label>What do you need done?</label><br />
+                <select name="services">
+                  <option>--Choose a Service--</option>
+                  <option>Interior Painting</option>
+                  <option>Exterior Painting</option>
+                  <option>Wallpaper Removal</option>
+                  <option>Wallpaper Hanging</option>                  
+                  <option>Carpentry</option>
+                  <option>Venetian Plaster & Repairs</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>When are you free?</label><br />
+                <input type="text" name="date" />
+              </div>              
+              <div class="field">
+                <label>What's your name?</label><br />
+                <input type="text" name="name" />
+              </div>                            
+              <div class="field">
+                <label>How should we contact you?</label>
+                <select name="contact">                  
+                  <option selected>I'll just call later</option>                  
+                  <option>Phone</option>
+                  <option>Email</option>                  
+                </select>
+              </div>
+              <div style="display:none" class="field" id="phone">
+                <label>Phone</label><br />
+                <input type="text" name="phone"></input>
+              </div>
+              <div style="display:none" class="field" id="email">
+                <label>Email</label><br />
+                <input type="text" name="email"></input>
+              </div>              
+              <button type="submit">Schedule me!</button>
+            </form>
           </div>                    
           <div id="gallery">
             <img src="images/is-entry.jpg" alt="" />
@@ -57,7 +94,7 @@ $gen = new LoremIpsumGenerator;
       <div class="push"></div>           
     </div>    
 <!--    <div id="page-bottom"></div>-->
-    <div id="footer">
+    <div id="footer">      
       <?php echo getFooter(); ?>
     </div>
   </body>

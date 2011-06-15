@@ -2,14 +2,23 @@
 
 function getFooter() {
   $html = 
-    "<ul class='menu'>
-      <li class='active'><a href='#'>Home</a></li>
-      <li><a href='services.php'>Services</a></li>
-      <li><a href='about.php'>About</a></li>
-      <li><a href='contact.php'>Contact</a></li>
-    </ul>    
-    <p>Copyright &copy; 2011 M.V.D. Painting & Decorating</p>
-    <title>M.V. DeLorenzo Painting & Decorating</title>";  
+    "
+      <div class='l'>
+      </div>
+      <div class='m'>
+        <ul class='menu'>
+        <li class='active'><a href='#'>Home</a></li>
+        <li><a href='services.php'>Services</a></li>
+        <li><a href='about.php'>About</a></li>
+        <li><a href='contact.php'>Contact</a></li>
+      </ul>    
+      <p>Copyright &copy; 2011 M.V.D. Painting & Decorating</p>
+      <title>M.V. DeLorenzo Painting & Decorating</title>
+    </div>
+    <div class='r'>
+      <img src='images/bbb.png' height='40' alt='' />
+      <img src='images/lead.png' height='40' alt='' />
+    </div>";
   return $html;
 }
 
@@ -29,6 +38,7 @@ function getHead($fonts = true) {
   
   if($fonts) {
     $html .= '
+    <link  href="http://fonts.googleapis.com/css?family=Bangers:regular" rel="stylesheet" type="text/css" ></link>      
     <link  href="http://fonts.googleapis.com/css?family=La+Belle+Aurore:regular" rel="stylesheet" type="text/css" >
     <link  href="http://fonts.googleapis.com/css?family=Just+Another+Hand:regular" rel="stylesheet" type="text/css" >
     <link rel="Stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-darkness/jquery-ui.css" type="text/css"></link>';
