@@ -9,19 +9,21 @@ body {
 #banner {
   height: 100px;
   width: 100%;
-  padding: 15px 15px 15px 50px ;  
 }
 
+#banner img {
+  margin: 10px 0 0 50px;
+}
 #banner span.title {
-  color: #E7E7E7;
+  color: #FFF;
   position: relative;
-  top:40px;
-  left: 100px;
-  font-family: 'Open Sans Condensed', arial, serif;
-  font-size: 100px;
+  top:0px;
+  left: 20px;
+  font-family: 'La Belle Aurore', serif;
+  font-size: 53px;
   font-style: normal;
   font-weight: 400;
-  text-shadow: none;
+  text-shadow: 2px 2px 2px 2px;
   text-decoration: none;
   text-transform: none;
   letter-spacing: 0em;
@@ -33,7 +35,7 @@ body {
 #banner-border {
     position: relative;
     top: -50px;
-    left: 10px;
+    left: 0px;
     margin-bottom: 35px;    
 }
 
@@ -49,8 +51,8 @@ body {
 #strip {
     position: absolute;
     top: 61px;
-    left: 206px;
-    z-index: 0;
+    left: 0;
+    z-index: -2;
     width: 100%;
     height: 27px;
     background: url('../images/strip.png') #0B0B0B repeat-x;
@@ -73,14 +75,6 @@ body {
   margin: 0 auto;
 }
 
-#left {
-  position: absolute;
-  width: 350px;
-  z-index: 1000;
-  margin-left: -370px;
-  font-family: "Arial";
-}
-
 .field {
   margin: 20px 5px;
 }
@@ -92,24 +86,20 @@ input {
   font-size: 1.2em;
 }
 
-#right {
-  border-radius: 8px;
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
-  padding: 10px;
-  width: 300px;
+.em {
+  font-size: 1.5em;
+  font-weight: 700;
 }
 
-#right p {
-  font-family: "Bangers";
-  margin-bottom: 10px;
-}
-
-#right label {
-  font-family: "bangers";
-  letter-spacing: 0.10em;
-  word-spacing: 0.101em;
-  line-height: 1.13;  
+#left {
+  position:absolute;
+  margin-left: -230px;
+  color: #F5F5F5;
+  width: 200px;
+  z-index: 1000;
+  font-family: arial, 'Just Another Hand', serif;
+  font-size: 24px;
+  
 }
 
 #right {
@@ -117,6 +107,32 @@ input {
   width: 300px;
   margin-left: 670px;
   z-index: 1000;
+}
+
+#right p {
+ font-family: 'Just Another Hand', serif;
+  font-size: 33px;
+  font-style: normal;
+  font-weight: 700;
+  text-shadow: none;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0em;
+  word-spacing: 0em;
+  line-height: 1.2;
+  color: #F5F5F5;
+  margin-bottom: 10px;
+}
+
+#right img {
+  margin-bottom: 15px;
+}
+
+#right label {
+  font-family: "bangers";
+  letter-spacing: 0.10em;
+  word-spacing: 0.101em;
+  line-height: 1.13;  
 }
 
 .container {
@@ -127,6 +143,7 @@ input {
 #page-bottom {
   width: 100%;  
   height: 100px;
+  background: url('../images/is-can2.png') #0B0B0B no-repeat;
 }
 
 /* Sticky Footer */
@@ -143,8 +160,8 @@ input {
   position: absolute;
   width:100% !important;
   border-top: 1px solid #141414;
-  padding: 15px;  
   text-align: center;
+  padding-top: 20px;
   font-size: 0.8em;
   color: #F5F5F5;
   z-index: 10;
