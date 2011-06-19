@@ -6,6 +6,28 @@ body {
   min-width: 1024px;
 }
 
+#flash {
+  color: #f1f1f1;
+  font-family: "Just another hand";
+  text-align: center;
+  display: none;
+  padding: 15px;
+  width: 750px;
+  height: 100px;
+  margin: auto;
+  margin-top: 65px;
+  background-color: #333333;
+  border: 5px solid #555555;
+}
+
+#flash h1 {
+  font-size: 2.5em;
+}
+#flash p {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+
 #banner {
   height: 100px;
   width: 100%;
@@ -80,7 +102,7 @@ body {
 }
 
 input {
-  height: 30px;
+  height: 25px;
   width: 250px;
   font-family: "bangers";
   font-size: 1.2em;

@@ -13,7 +13,7 @@ $gen = new LoremIpsumGenerator;
   <body>
     <div id="wrapper">
       <div id="banner">
-        <img src="images/mvd_logo_100.png" alt="" />
+        <img src="images/mvd_logo_text.png" alt="" />
 <!--        <span class="title">M.V.D.</span>-->
       </div>
         <span style="float: right; color: #A5A5A5; position:relative; top:-30px;">
@@ -38,8 +38,7 @@ $gen = new LoremIpsumGenerator;
             <p><span class="em"><?php echo $gen->getContent(1, "plain");?></span> <?php echo $gen->getContent(12, "plain");?></p>
           </div>
           <div id="right">
-            <p>Schedule a free consultation</p>
-            <form action="schedule.php" method="POST">
+            <p>Schedule a free estimate</p>            
               <div class="field">
                 <label>What do you need done?</label><br />
                 <select name="services">
@@ -49,7 +48,6 @@ $gen = new LoremIpsumGenerator;
                   <option>Wallpaper Removal</option>
                   <option>Wallpaper Hanging</option>                  
                   <option>Carpentry</option>
-                  <option>Venetian Plaster & Repairs</option>
                 </select>
               </div>
               <div class="field">
@@ -63,7 +61,7 @@ $gen = new LoremIpsumGenerator;
               <div class="field">
                 <label>How should we contact you?</label>
                 <select name="contact">                  
-                  <option selected>I'll just call later</option>                  
+                  <option selected>--Choose a Method--</option>                  
                   <option>Phone</option>
                   <option>Email</option>                  
                 </select>
@@ -76,8 +74,7 @@ $gen = new LoremIpsumGenerator;
                 <label>Email</label><br />
                 <input type="text" name="email"></input>
               </div>              
-              <button type="submit">Schedule me!</button>
-            </form>
+              <button id="submit">Schedule me!</button>            
           </div>                    
           <div id="gallery">
             <img src="images/is-entry.jpg" alt="" />
@@ -86,9 +83,11 @@ $gen = new LoremIpsumGenerator;
             <img src="images/is-kitchen.jpg" alt="" />
             <img src="images/is-living-room.jpg" alt="" />
             <img src="images/is-sinks.jpg" alt="" />
-            <img src="images/is-sky.jpg" alt="" />
-            <img src="images/is-ceiling.jpg" alt="" />
           </div>
+        </div>
+        <div id="flash">
+          <h1>Thank you for your request!</h1>
+          <p>We will be in touch with you shortly to confirm your appointment.</p>
         </div>
       </div>    
       <div class="push"></div>           

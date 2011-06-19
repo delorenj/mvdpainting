@@ -3,19 +3,17 @@
 function getFooter() {
   $html = 
     "
-      <div class='l'>
-      </div>
-      <div class='m'>
+     <div>
         <ul class='menu'>
         <li class='active'><a href='#'>Home</a></li>
         <li><a href='services.php'>Services</a></li>
         <li><a href='about.php'>About</a></li>
         <li><a href='contact.php'>Contact</a></li>
       </ul>    
-      <p>Copyright &copy; 2011 M.V.D. Painting & Decorating</p>
-      <title>M.V. DeLorenzo Painting & Decorating</title>
+      <p>Copyright &copy; 2011 M.V.D. Painting & Decorating</p>      
+      <!-- <p>Email: <a href='mailto:mike@mvdpainting.com'>mike@mvdpainting.com</a> Phone: 215-962-2469</p> -->
     </div>
-    <div class='r'>
+    <div>
       <img src='images/bbb.png' height='40' alt='' />
       <img src='images/lead.png' height='40' alt='' />
     </div>";

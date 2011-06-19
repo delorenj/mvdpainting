@@ -47,7 +47,14 @@ EPC = function() {
           default :
             $("#phone, #email").slideUp("slow");
         }
-      });      
+      });   
+      $("#submit").click(function() {
+        $("#flash").slideDown("fast", function() {
+          setTimeout(function() {
+            $("#flash").fadeOut("slow");
+          },2000);
+        })
+      })
     }
   }
 
