@@ -55,6 +55,7 @@ EPC = function() {
           },2000);
         })
       })
+      $("#contact-middle").fadeIn("slow");
     }
   }
 

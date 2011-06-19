@@ -6,6 +6,14 @@ body {
   min-width: 1024px;
 }
 
+#contact-middle {
+  display: none;
+  background: url('../images/contact.jpg') #0B0B0B no-repeat;
+  width: 960px;
+  height: 480px;
+  margin: auto
+}
+
 #flash {
   color: #f1f1f1;
   font-family: "Just another hand";
