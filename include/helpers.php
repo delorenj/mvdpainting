@@ -10,7 +10,7 @@ function getFooter() {
         <li><a href='about.php'>About</a></li>
         <li><a href='contact.php'>Contact</a></li>
       </ul>    
-      <p>Copyright &copy; 2011 M.V.D. Painting & Decorating</p>      
+      <p>Copyright &copy; 2011 M.V.DeLorenzo Painting & Decorating</p>      
       <!-- <p>Email: <a href='mailto:mike@mvdpainting.com'>mike@mvdpainting.com</a> Phone: 215-962-2469</p> -->
     </div>
     <div>
