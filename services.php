@@ -10,7 +10,7 @@ $gen = new LoremIpsumGenerator;
   <head>
     <?php echo getHead(); ?>    
   </head>
-  <body>
+  <body class="painting-bg">
     <div id="wrapper">
       <div id="banner">
         <img src="images/mvd_logo_100.png" alt="" />
@@ -31,15 +31,20 @@ $gen = new LoremIpsumGenerator;
         </ul>
       </div>
       <div id="content">
-        <div class="container">
-            <ul>
-              <li>interior and exterior painting</li>
-              <li>wallpaper removal & wallpaper hanging</li>
-              <li>spackling</li>
-              <li>sheetrocking</li>
-              <li>venetian plaster & plaster repairs</li>
-              <li>carpentry jobs</li>              
-            </ul>
+        <div id="copy-container">
+          <h1>
+            <span class="current">Painting</span>
+            <span style="display:none;">Wallpaper</span>
+          </h1>
+          <span>
+            <a id="next-service" href="#"><img src="images/arrow-r.png" /></a>
+          </span>
+          <p class="current">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+          </p>
+          <p style="display:none;">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+          </p>          
         </div>
       </div>    
       <div class="push"></div>           

@@ -99,6 +99,53 @@ body {
   padding: 20px;
 }
 
+#copy-container {
+  position: relative;
+  top: 30px;
+  left: 100px;
+  color: #fff;
+  width: 300px;
+  font-family: 'Istok Web', sans-serif;
+}
+
+#copy-container h1 {
+  font-size: 1.2em;
+  font-weight: 900;  
+  border-bottom: 5px solid #951e1e;
+  text-align: right;
+}
+
+#copy-container h1 span {
+  position: absolute;
+  top:-22px;
+  right: 20px;
+}
+
+#copy-container span {
+  position: absolute;
+  top: -25px;
+  right: -10px;
+}
+
+.gone {display: none}
+
+#copy-container p {
+  padding-top: 20px;
+  font-size: 0.9em;
+}
+
+.painting-bg {
+  background-image: url("../images/ladder.png");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+.wallpaper-bg {
+  background-image: url("../images/wallpaper.png");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
 #gallery, div.orbit-wrapper {
   width: 650px !important;
   height: 400px !important;
@@ -206,7 +253,7 @@ select {
 #footer {
   position: absolute;
   width:100% !important;
-  border-top: 1px solid #141414;
+/*  border-top: 1px solid #141414;*/
   text-align: center;
   padding-top: 20px;
   font-size: 0.8em;

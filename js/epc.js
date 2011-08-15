@@ -63,4 +63,34 @@ EPC = function() {
 
 jQuery(document).ready(function() {
   EPC.init();
+  
+  $("#next-service").click(function() {
+    $("span.current").each(function() {
+      $(this).removeClass("current").animate({
+        top: "-=30px",
+        opacity: 0
+      },{
+        duration: 500,
+        complete: function() {
+          $(this).addClass("gone").next().fadeIn("slow", function() {
+            $(this).addClass("current");          
+          })
+        }
+      })
+    })
+    
+    $("p.current").each(function() {
+      $(this).removeClass("current").animate({
+        top: "-=30px",
+        opacity: 0
+      },{
+        duration: 500,
+        complete: function() {
+          $(this).addClass("gone").next().fadeIn("slow", function() {
+            $(this).addClass("current");          
+          })
+        }
+      })
+    })    
+  })
 });

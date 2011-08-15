@@ -39,6 +39,7 @@ function getHead($fonts = true) {
     <link  href="http://fonts.googleapis.com/css?family=Bangers:regular" rel="stylesheet" type="text/css" ></link>      
     <link  href="http://fonts.googleapis.com/css?family=La+Belle+Aurore:regular" rel="stylesheet" type="text/css" >
     <link  href="http://fonts.googleapis.com/css?family=Just+Another+Hand:regular" rel="stylesheet" type="text/css" >
+    <link href="http://fonts.googleapis.com/css?family=Istok+Web:400,700" rel="stylesheet" type="text/css">
     <link rel="Stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-darkness/jquery-ui.css" type="text/css"></link>';
   }
   
