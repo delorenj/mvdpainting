@@ -3,56 +3,70 @@ EPC = function() {
   
   return {
     swapTiles : function(a,b) {      
-      console.log("swap: " + a + ":" + b);
-      $("#img-" + a).swap({
-        target: "img-" + b,
-        opacity: "0.5",
-        speed: 1000,
+      var t1 = $("#img-" + a);
+      var t2 = $("#img-" + b);
+      var t1p = $(t1).offset();
+      var t2p = $(t2).offset();
+      var t1x = t1p.left;
+      var t1y = t1p.top;
+      var t2x = t2p.left;
+      var t2y = t2p.top;
+      
+      var direction_primary_y = '-';
+      var direction_secondary_y = '-';
+      if (t1y<=t2y) { 
+        direction_primary_y = '+'; 
+        total_y = t2y-t1y;
+      }else{ 
+        var total_y = t1y-t2y;
+      }
+      if (direction_primary_y=='-') {
+        direction_secondary_y='+';
+      }else{
+        direction_secondary_y='-';
+      }
+
+      var direction_primary_x = '-';
+      var direction_secondary_x = '-';
+      if (t1x<=t2x) { // if primary left of secondary 
+        direction_primary_x = '+'; 
+        total_x = t2x-t1x;
+      }else{ // if primary below secondary 
+        total_x = t1x-t2x;
+      }
+      if (direction_primary_x=='-') {
+        direction_secondary_x='+';
+      }else{
+        direction_secondary_x='-';
+      }
+
+      $(t1).animate({
+        top: direction_primary_y+"="+(total_y)+"px",
+        left: direction_primary_x+"="+(total_x)+"px"
+      }, {
+        duration: 1200,
+        easing: "easeInOutExpo",
+        complete: function() {
+          var t1id = $(t1).attr("id");
+          var t2id = $(t2).attr("id");
+          $(t1).attr({
+            id: t2id
+          });
+          $(t2).attr({
+            id: t1id
+          });                    
+        },
         queue: false
-      })
-//      var t1 = $("#img-" + a + " img");
-//      var t2 = $("#img-" + b + " img");
-//      $(t1).css("position", "absolute");
-//      $(t2).css("position", "absolute");
-//      var t1p = $(t1).offset();
-//      var t2p = $(t2).offset();
-//      var t1x = t1p.left;
-//      var t1y = t1p.top;
-//      var t2x = t2p.left;
-//      var t2y = t2p.top;
-//      
-//      console.log(t1x + " : " + t1y);
-//      $(t1).animate({
-//        top: t2y,
-//        left: t2x
-//      }, {
-//        duration: 1000,
-//        queue: false
-//      });
-//
-//      $(t1).closest("li").animate({
-//        top: t2y,
-//        left: t2x
-//      }, {
-//        duration: 1000,
-//        queue: false
-//      });
-//
-//      $(t2).animate({
-//        top: t1y,
-//        left: t1x
-//      }, {
-//        duration: 1000,
-//        queue: false
-//      });
-//
-//      $(t2).closest("li").animate({
-//        top: t1y,
-//        left: t1x
-//      }, {
-//        duration: 1000,
-//        queue: false
-//      });
+      });
+
+      $(t2).animate({
+        top: direction_secondary_y+"="+(total_y)+"px",
+        left: direction_secondary_x+"="+(total_x)+"px"
+      }, {
+        duration: 1200,
+        easing: "easeInOutExpo",
+        queue: false
+      });
     },
     
     tilesPerRow : function() {
@@ -66,7 +80,7 @@ EPC = function() {
 //      console.log("window width=" + windowWidth);
 //      console.log("tilesPerRow=" + _tilesPerRow);
 //      console.log("grid width=" + _tilesPerRow * tileWidth);
-      $("#grid-container").css("width", _tilesPerRow * tileWidth);
+      $("#bg-grid").css("width", _tilesPerRow * tileWidth);
     },
     
     init : function() {
@@ -153,7 +167,7 @@ jQuery(document).ready(function() {
             "opacity": "0"
           },
           {
-            duration: 1000
+            duration: 750
           }
         );
       setTimeout(function() {
@@ -170,7 +184,7 @@ jQuery(document).ready(function() {
           if($("#img-" + i).closest("li").attr("rel") == cat) continue;
           EPC.swapTiles(i, swappers.pop());
         }
-      }, 1500);      
+      }, 1000);      
     });
   
   $("#next-service").click(function() {

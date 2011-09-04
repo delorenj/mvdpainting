@@ -130,7 +130,7 @@
 				}
 	        }
 	        function stopClock() {
-	        	if(!options.timer || options.timer == 'false') { return false; } else {
+	        	if(!options.timer || options.timer == 'false') {return false;} else {
 		            timerRunning = false;
 		            clearInterval(clock);
 		            pause.addClass('active');
@@ -235,7 +235,7 @@
 
             //DirectionalNav { rightButton --> shift("next"), leftButton --> shift("prev");
             if(options.directionalNav) {
-            	if(options.directionalNav == "false") { return false; }
+            	if(options.directionalNav == "false") {return false;}
                 var directionalNavHTML = '<div class="slider-nav"><span class="right">Right</span><span class="left">Left</span></div>';
                 orbitWrapper.append(directionalNavHTML);
                 var leftBtn = orbitWrapper.children('div.slider-nav').children('span.left'),
@@ -280,7 +280,7 @@
             
             //Bullet Nav Execution
         	function setActiveBullet() { 
-        		if(!options.bullets) { return false; } else {
+        		if(!options.bullets) {return false;} else {
 	        		bullets.children('li').removeClass('active').eq(activeSlide).addClass('active');
 	        	}
         	}
@@ -295,7 +295,7 @@
                 var prevActiveSlide = activeSlide,
                 	slideDirection = direction;
                 //exit function if bullet clicked is same as the current image
-                if(prevActiveSlide == slideDirection) { return false; }
+                if(prevActiveSlide == slideDirection) {return false;}
                 //reset Z & Unlock
                 function resetAndUnlock() {
                     slides
@@ -304,7 +304,7 @@
                     unlock();
                     options.afterSlideChange.call(this);
                 }
-                if(slides.length == "1") { return false; }
+                if(slides.length == "1") {return false;}
                 if(!locked) {
                     lock();
 					 //deduce the proper activeImage
@@ -411,108 +411,116 @@
 var swapping = false;
 
 (function($) {
-    $.fn.extend({
-        swap: function(options) {
+  $.fn.extend({
+    swap: function(options) {
 			
-			var defaults = {
-			    target: "",
-				speed: 1000,
-				opacity: "1",
-				callback: function() {}
-			};
-			var options = $.extend(defaults, options);
+      var defaults = {
+        target: "",
+        speed: 1000,
+        opacity: "1",
+        callback: function() {}
+      };
+      var options = $.extend(defaults, options);
 			
-			return this.each(function() {
+      return this.each(function() {
 				
-				var obj = $(this);
+        var obj = $(this);
 				
-				if (options.target!="" && !swapping) {
+        if (options.target!="" && !swapping) {
 					
-					swapping = true;
+          swapping = true;
 					
-					// set primary and secondary elements to relative if not already specified a positon CSS attribute
-					var current_primary_pos = obj.css("position");
-					var current_secondary_pos = $("#"+options.target).css("position");
-					if (current_primary_pos!="relative" && current_primary_pos!="absolute") {
-						obj.css("position", "relative");
-					}
-					if (current_secondary_pos!="relative" && current_secondary_pos!="absolute") {
-						$("#"+options.target).css("position", "relative");
-					}
-					//
+          // set primary and secondary elements to relative if not already specified a positon CSS attribute
+          var current_primary_pos = obj.css("position");
+          var current_secondary_pos = $("#"+options.target).css("position");
+          if (current_primary_pos!="relative" && current_primary_pos!="absolute") {
+            obj.css("position", "relative");
+          }
+          if (current_secondary_pos!="relative" && current_secondary_pos!="absolute") {
+            $("#"+options.target).css("position", "relative");
+          }
+          //
 					
-					// calculate y-axis movement
-					var current_primary_position = obj.offset();
-					var current_primary_top = current_primary_position.top;
-					var current_secondary_position = $("#"+options.target).offset();
-					var current_secondary_top = current_secondary_position.top;
-					var direction_primary_y = '-';
-					var direction_secondary_y = '-';
-					if (current_primary_top<=current_secondary_top) { // if primary above secondary 
-						var direction_primary_y = '+'; 
-						var total_y = current_secondary_top-current_primary_top;
-					}else{ // if primary below secondary 
-						var total_y = current_primary_top-current_secondary_top;
-					}
-					if (direction_primary_y=='-') { direction_secondary_y='+'; }else{ direction_secondary_y='-'; }
-					//
+          // calculate y-axis movement
+          var current_primary_position = obj.offset();
+          var current_primary_top = current_primary_position.top;
+          var current_secondary_position = $("#"+options.target).offset();
+          var current_secondary_top = current_secondary_position.top;
+          var direction_primary_y = '-';
+          var direction_secondary_y = '-';
+          if (current_primary_top<=current_secondary_top) { // if primary above secondary 
+            var direction_primary_y = '+'; 
+            var total_y = current_secondary_top-current_primary_top;
+          }else{ // if primary below secondary 
+            var total_y = current_primary_top-current_secondary_top;
+          }
+          if (direction_primary_y=='-') {
+            direction_secondary_y='+';
+          }else{
+            direction_secondary_y='-';
+          }
+          //
 					
-					// calculate x-axis movement
-					var current_primary_position = obj.offset();
-					var current_primary_left = current_primary_position.left;
-					var current_secondary_position = $("#"+options.target).offset();
-					var current_secondary_left = current_secondary_position.left;
-					var direction_primary_x = '-';
-					var direction_secondary_x = '-';
-					if (current_primary_left<=current_secondary_left) { // if primary left of secondary 
-						var direction_primary_x = '+'; 
-						var total_x = current_secondary_left-current_primary_left;
-					}else{ // if primary below secondary 
-						var total_x = current_primary_left-current_secondary_left;
-					}
-					if (direction_primary_x=='-') { direction_secondary_x='+'; }else{ direction_secondary_x='-'; }
-					//
+          // calculate x-axis movement
+          var current_primary_position = obj.offset();
+          var current_primary_left = current_primary_position.left;
+          var current_secondary_position = $("#"+options.target).offset();
+          var current_secondary_left = current_secondary_position.left;
+          var direction_primary_x = '-';
+          var direction_secondary_x = '-';
+          if (current_primary_left<=current_secondary_left) { // if primary left of secondary 
+            var direction_primary_x = '+'; 
+            var total_x = current_secondary_left-current_primary_left;
+          }else{ // if primary below secondary 
+            var total_x = current_primary_left-current_secondary_left;
+          }
+          if (direction_primary_x=='-') {
+            direction_secondary_x='+';
+          }else{
+            direction_secondary_x='-';
+          }
+          //
 					
-					// do swapping
-					obj.animate({
-						opacity: options.opacity
-					}, 100, function() {
-						obj.animate({
-							top: direction_primary_y+"="+(total_y)+"px",
-							left: direction_primary_x+"="+(total_x)+"px"
-						}, {
+          // do swapping
+          obj.animate({
+            opacity: options.opacity
+          }, 100, function() {
+            obj.animate({
+              top: direction_primary_y+"="+(total_y)+"px",
+              left: direction_primary_x+"="+(total_x)+"px"
+            }, {
               duration: options.speed, 
               complete: function() {
                 obj.animate({
                   opacity: "1"
-  							}, 100);
+                }, 100);
               },
               queue: false
             });
-					});
-					$("#"+options.target).animate({
-						opacity: options.opacity
-					}, 100, function() {
-						$("#"+options.target).animate({
-							top: direction_secondary_y+"="+(total_y)+"px",
-							left: direction_secondary_x+"="+(total_x)+"px"
-						}, options.speed, function() {
-							$("#"+options.target).animate({
-								opacity: "1"
-							}, 100, function() { 
-								swapping = false; // call the callback and apply the scope:
-    								options.callback.call(this);
- 							});
-						});
-					});
+          });
+          $("#"+options.target).animate({
+            opacity: options.opacity
+          }, 100, function() {
+            $("#"+options.target).animate({
+              top: direction_secondary_y+"="+(total_y)+"px",
+              left: direction_secondary_x+"="+(total_x)+"px"
+            }, options.speed, function() {
+              $("#"+options.target).animate({
+                opacity: "1"
+              }, 100, function() { 
+                swapping = false; // call the callback and apply the scope:
+                options.callback.call(this);
+              });
+            });
+          });
 					
-				}
-				
-			});
-			
-			
         }
-    });
+				
+      });
+			
+			
+    }
+  });
 })(jQuery);
 
 
@@ -544,7 +552,7 @@ $.widget("ui.selectmenu", {
         
         //transfer tabindex
         var tabindex = this.element.attr('tabindex');
-        if(tabindex){ this.newelement.attr('tabindex', tabindex); }
+        if(tabindex){this.newelement.attr('tabindex', tabindex);}
         
         //save reference to select in data for ease in calling methods
         this.newelement.data('selectelement', this.element);
@@ -622,8 +630,8 @@ $.widget("ui.selectmenu", {
 
         //change event on original selectmenu
         this.element
-            .click(function(){ this._refreshValue(); })
-            .focus(function(){ this.newelement[0].focus(); });
+            .click(function(){this._refreshValue();})
+            .focus(function(){this.newelement[0].focus();});
         
         //create menu portion, append to body
         var cornerClass = (o.style == "dropdown")? " ui-corner-bottom" : " ui-corner-all"
@@ -657,7 +665,7 @@ $.widget("ui.selectmenu", {
                             var changed = $(this).data('index') != self._selectedIndex();
                             self.value($(this).data('index'));
                             self.select(event);
-                            if(changed){ self.change(event); }
+                            if(changed){self.change(event);}
                             self.close(event,true);
                         }
                     return false;
@@ -671,7 +679,7 @@ $.widget("ui.selectmenu", {
                     $(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
                 })
                 .bind('mouseout blur', function(){ 
-                    if($(this).is( self._selectedOptionLi() )){ $(this).addClass(activeClass); }
+                    if($(this).is( self._selectedOptionLi() )){$(this).addClass(activeClass);}
                     $(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
                 });
                 
@@ -714,7 +722,7 @@ $.widget("ui.selectmenu", {
         
         //add corners to top and bottom menu items
         this.list.find('li:last').addClass("ui-corner-bottom");
-        if(o.style == 'popup'){ this.list.find('li:first').addClass("ui-corner-top"); }
+        if(o.style == 'popup'){this.list.find('li:first').addClass("ui-corner-top");}
         
         //transfer classes to selectmenu and list
         if(o.transferClasses){
@@ -729,11 +737,11 @@ $.widget("ui.selectmenu", {
         this.newelement.width( (o.width) ? o.width : selectWidth);
         
         //set menu width to either menuWidth option value, width option value, or select width 
-        if(o.style == 'dropdown'){ this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width : selectWidth)); }
-        else { this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width - o.handleWidth : selectWidth - o.handleWidth)); }   
+        if(o.style == 'dropdown'){this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width : selectWidth));}
+        else {this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width - o.handleWidth : selectWidth - o.handleWidth));}   
         
         //set max height from option 
-        if(o.maxHeight && o.maxHeight < this.list.height()){ this.list.height(o.maxHeight); }   
+        if(o.maxHeight && o.maxHeight < this.list.height()){this.list.height(o.maxHeight);}   
         
         //save reference to actionable li's (not group label li's)
         this._optionLis = this.list.find('li:not(.'+ self.widgetBaseClass +'-group)');
@@ -812,7 +820,7 @@ $.widget("ui.selectmenu", {
         this.element.hide();
         
         //transfer disabled state
-        if(this.element.attr('disabled') == true){ this.disable(); }
+        if(this.element.attr('disabled') == true){this.disable();}
         
         //update value
         this.value(this._selectedIndex());
@@ -833,7 +841,7 @@ $.widget("ui.selectmenu", {
     _typeAhead: function(code, eventType){
         var self = this;
         //define self._prevChar if needed
-        if(!self._prevChar){ self._prevChar = ['',0]; }
+        if(!self._prevChar){self._prevChar = ['',0];}
         var C = String.fromCharCode(code);
         c = C.toLowerCase();
         var focusFound = false;
@@ -847,9 +855,9 @@ $.widget("ui.selectmenu", {
                 var thisText = $(this).text();
                 if( thisText.indexOf(C) == 0 || thisText.indexOf(c) == 0){
                         if(self._prevChar[0] == C){
-                            if(self._prevChar[1] < i){ focusOpt(this,i); }  
+                            if(self._prevChar[1] < i){focusOpt(this,i);}  
                         }
-                        else{ focusOpt(this,i); }   
+                        else{focusOpt(this,i);}   
                 }
             }
         });
@@ -874,7 +882,7 @@ $.widget("ui.selectmenu", {
                 .addClass(self.widgetBaseClass + '-open')
                 .attr('aria-hidden', false)
                 .find('li:not(.'+ self.widgetBaseClass +'-group):eq('+ this._selectedIndex() +') a')[0].focus();    
-            if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top'); } 
+            if(this.options.style == "dropdown"){this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');} 
             this._refreshPosition();
             this._trigger("open", event, this._uiHash());
         }
@@ -886,7 +894,7 @@ $.widget("ui.selectmenu", {
             this.list
                 .attr('aria-hidden', true)
                 .removeClass(this.widgetBaseClass+'-open');
-            if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all'); }
+            if(this.options.style == "dropdown"){this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all');}
             if(retainFocus){this.newelement[0].focus();}    
             this._trigger("close", event, this._uiHash());
         }
@@ -905,8 +913,8 @@ $.widget("ui.selectmenu", {
         $('.'+ this.widgetBaseClass +'.ui-state-hover').trigger('mouseout');
     },
     _toggle: function(event,retainFocus){
-        if(this.list.is('.'+ this.widgetBaseClass +'-open')){ this.close(event,retainFocus); }
-        else { this.open(event); }
+        if(this.list.is('.'+ this.widgetBaseClass +'-open')){this.close(event,retainFocus);}
+        else {this.open(event);}
     },
     _formatText: function(text){
         return this.options.format ? this.options.format(text) : text;
@@ -930,9 +938,9 @@ $.widget("ui.selectmenu", {
             var currIndex = parseInt(this._focusedOptionLi().data('index'), 10);
             var newIndex = currIndex + amt;
         }
-        else { var newIndex = parseInt(this._optionLis.filter(amt).data('index'), 10); }
+        else {var newIndex = parseInt(this._optionLis.filter(amt).data('index'), 10);}
         
-        if(newIndex < 0){ newIndex = 0; }
+        if(newIndex < 0){newIndex = 0;}
         if(newIndex > this._optionLis.size()-1){
             newIndex =  this._optionLis.size()-1;
         }
