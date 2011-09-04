@@ -1,4 +1,55 @@
 <?php
+ob_start();
+require_once __DIR__ . '/firephp/fb.php';
+
+function fbe($msg) {
+  fb($msg);
+  error_log($msg);
+}
+
+switch($_SERVER["HTTP_HOST"]){
+    case 'localhost':
+        define("IMAGE_PATH", "/mvdpainting/images/");
+        define("IMAGE_URL", "http://localhost/mvdpainting/images/");
+        break;
+}
+
+function getExtension($str) {
+  $i = strrpos($str,".");
+  if (!$i) { return ""; }
+  $l = strlen($str) - $i;
+  $ext = substr($str,$i+1,$l);
+  return $ext;
+}
+
+function getBgTileImages($dir) {  
+  $images = array();
+  $dircomp = explode(DIRECTORY_SEPARATOR, $dir);
+  $basepath = getcwd(). DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $dircomp[0] . DIRECTORY_SEPARATOR . $dircomp[1];
+  if (is_dir($basepath)) {
+    if ($dh = opendir($basepath)) {
+      while (($file = readdir($dh)) !== false) {
+        $fullpath = $basepath . DIRECTORY_SEPARATOR . $file;
+        if((filetype($fullpath) != "dir") && ($file != ".") && ($file != "..")) {
+          $images[] = preg_replace("/\\\\/", "/", IMAGE_URL . $dircomp[0] . DIRECTORY_SEPARATOR . $dircomp[1] . $file);
+        }
+      }
+      closedir($dh);
+    }
+  }
+  return $images;
+}
+
+function getTileCategory($path) {
+  $sploded = explode("/", $path);
+  return($sploded[count($sploded)-2]);
+}
+
+function getBWPath($path) {
+  $bn = basename($path);
+  $path = preg_replace("/" . $bn . "/", "bw/" . $bn, $path);
+  return $path;
+}
 
 function getFooter() {
   $html = 
@@ -30,8 +81,7 @@ function getHead($fonts = true) {
     <link href="css/default.css" type="text/css" rel="stylesheet"></link>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-select.js"></script>    
-    <script type="text/javascript" src="js/jquery.orbit-1.2.3.js"></script>
+    <script type="text/javascript" src="js/jquery.plugins.js"></script>
     <script type="text/javascript" src="js/epc.js"></script>';
   
   if($fonts) {

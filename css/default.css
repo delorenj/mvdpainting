@@ -2,6 +2,8 @@ html, body { height: 100%}
 
 body {
   background-color: #0B0B0B;
+  background-image: url('../images/bg_diag.png');
+  background-repeat: repeat;
   font-family: arial;
   min-width: 1024px;
 }
@@ -96,7 +98,6 @@ body {
 
 #content {
   position: relative;
-  padding: 20px;
 }
 
 #copy-container {
@@ -241,14 +242,14 @@ select {
 }
 
 /* Sticky Footer */
-#wrapper {
+/*#wrapper {
   min-height: 100%;
 	height: auto !important;
 	height: 100%; 
   margin: 0 auto -100px;
 }
 
-.push, #footer { height: 100px;}
+.push, #footer { height: 100px;}*/
 
 #footer {
   position: absolute;
@@ -328,3 +329,24 @@ ul.menu li a {
 }
 
 .ui-datepicker { display: none}
+
+#bg-grid {
+  margin: 0 auto;
+}
+
+#bg-grid ul li {
+  position: relative;
+  display: inline;
+  text-decoration: none;
+  float: left;
+  width: 250px;
+  height: 250px;
+}
+
+#bg-grid ul li img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 250px;
+}
