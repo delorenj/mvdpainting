@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once __DIR__ . '/firephp/fb.php';
+require_once dirname(__FILE__) . '/firephp/fb.php';
 
 function fbe($msg) {
   fb($msg);
@@ -12,6 +12,17 @@ switch($_SERVER["HTTP_HOST"]){
         define("IMAGE_PATH", "/mvdpainting/images/");
         define("IMAGE_URL", "http://localhost/mvdpainting/images/");
         break;
+    case 'stage.mvdpainting.com':
+        define("IMAGE_PATH", "/home3/mvdpaint/public_html/stage/images/");
+        define("IMAGE_URL", "http://stage.mvdpainting.com/images/");
+        fbe(getcwd());
+        break;      
+    case 'mvdpainting.com':
+    default:
+        define("IMAGE_PATH", "/home3/mvdpaint/public_html/images/");
+        define("IMAGE_URL", "http://mvdpainting.com/images/");
+        fbe(getcwd());
+        break;            
 }
 
 function getExtension($str) {
@@ -31,7 +42,7 @@ function getBgTileImages($dir) {
       while (($file = readdir($dh)) !== false) {
         $fullpath = $basepath . DIRECTORY_SEPARATOR . $file;
         if((filetype($fullpath) != "dir") && ($file != ".") && ($file != "..")) {
-          $images[] = preg_replace("/\\\\/", "/", IMAGE_URL . $dircomp[0] . DIRECTORY_SEPARATOR . $dircomp[1] . $file);
+          $images[] = preg_replace("/\\\\/", "/", IMAGE_URL . $dircomp[0] . DIRECTORY_SEPARATOR . $dircomp[1] . DIRECTORY_SEPARATOR . $file);
         }
       }
       closedir($dh);

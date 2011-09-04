@@ -14,10 +14,9 @@ $gen = new LoremIpsumGenerator;
     <div id="wrapper">
       <div id="banner">
         <img src="images/mvd_logo_text.png" alt="" />
-<!--        <span class="title">M.V.D.</span>-->
       </div>
         <span style="float: right; color: #A5A5A5; position:relative; top:-30px;">
-          <iframe src="http://www.facebook.com/plugins/like.php?app_id=171249642935162&amp;href=htttp%3A%2F%2Fwendell.jaradd.com&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=dark&amp;font=arial&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:40px;" allowTransparency="true"></iframe>
+          <fb:like href="mvdpainting.com" send="true" width="450" show_faces="false" action="recommend" colorscheme="dark" font="trebuchet ms"></fb:like>  
         </span>                        
       <div id="banner-border">
           <div id="brush"></div>
@@ -26,9 +25,9 @@ $gen = new LoremIpsumGenerator;
       <div id="banner-menu">        
         <ul class="menu">
           <li><a href="index.php">Home</a></li>
-          <li><a href="services.php">Services</a></li>
+          <li><a href="gallery.php">Gallery</a></li>
           <li><a href="about.php">About</a></li>
-          <li class="active"><a href="#">Contact</a></li>          
+          <li class="active"><a href="contact.php">Contact</a></li>          
         </ul>
       </div>
       <div id="content">
@@ -44,4 +43,6 @@ $gen = new LoremIpsumGenerator;
       <?php echo getFooter(); ?>
     </div>
   </body>
+  <div id="fb-root"></div>
+  <script src="http://connect.facebook.net/en_US/all.js#appId=171421066267048&amp;xfbml=1"></script>  
 </html>
