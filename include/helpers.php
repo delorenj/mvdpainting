@@ -90,6 +90,7 @@ function getHead($fonts = true) {
     <link type="text/css" rel="stylesheet" href="css/orbit/orbit-1.2.3.css" />            
     <link rel="Stylesheet" href="css/ui-selectmenu.css" type="text/css"></link>
     <link href="css/default.css" type="text/css" rel="stylesheet"></link>
+    <link rel="shortcut icon" href="favicon.ico"></link>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.plugins.js"></script>

@@ -171,6 +171,7 @@ jQuery(document).ready(function() {
     })
     .click(function() {
       var cat = $(this).closest("li").attr("rel");
+      $(".bg-grid-copy").fadeOut("slow");
       EPC.setCopy(cat);
       $("li[rel='" + cat + "'] img.bw").stop().animate(
         {
@@ -220,7 +221,8 @@ jQuery(document).ready(function() {
       }, 2300);
       setTimeout(function() {
         var rel = $("#img-1").attr("rel");
-        alert(rel + " copy appears now");
+        $(".bg-grid-copy").fadeOut();
+        $("#" + rel).fadeIn("slow");
       }, 3100);
     });
   

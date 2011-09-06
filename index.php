@@ -49,7 +49,27 @@ shuffle($tiles);
             <?php endforeach; ?>
           </ul>
         </div>
-      </div>    
+        <div id="paint" class="bg-grid-copy">
+          <h1>Paint</h1>
+          <p><?php echo $gen->getContent(40, 'text');?></p>
+          <p><?php echo $gen->getContent(50, 'text');?></p>
+        </div>
+        <div id="wallpaper" class="bg-grid-copy">
+          <h1>Wallpaper</h1>
+          <p><?php echo $gen->getContent(40, 'text');?></p>
+          <p><?php echo $gen->getContent(50, 'text');?></p>
+        </div>        
+        <div id="carpentry" class="bg-grid-copy">
+          <h1>Carpentry</h1>
+          <p><?php echo $gen->getContent(40, 'text');?></p>
+          <p><?php echo $gen->getContent(50, 'text');?></p>
+        </div>   
+        <div id="misc" class="bg-grid-copy">
+          <h1>Other</h1>
+          <p><?php echo $gen->getContent(40, 'text');?></p>
+          <p><?php echo $gen->getContent(50, 'text');?></p>
+        </div>        
+      </div>
     </div>
   </body>
   <div id="fb-root"></div>
