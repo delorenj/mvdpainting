@@ -11,7 +11,7 @@ EPC = function() {
       _copy = x
     },
     
-    swapTiles : function(a,b) {      
+    swapTiles : function(a,b, duration) {
       var t1 = $("#img-" + a);
       var t2 = $("#img-" + b);
       var t1p = $(t1).offset();
@@ -20,6 +20,7 @@ EPC = function() {
       var t1y = t1p.top;
       var t2x = t2p.left;
       var t2y = t2p.top;
+      duration = duration || 1200;
       
       var direction_primary_y = '-';
       var direction_secondary_y = '-';
@@ -53,7 +54,7 @@ EPC = function() {
         top: direction_primary_y+"="+(total_y)+"px",
         left: direction_primary_x+"="+(total_x)+"px"
       }, {
-        duration: 1200,
+        duration: duration,
         easing: "easeInOutExpo",
         complete: function() {
           var t1id = $(t1).attr("id");
@@ -72,7 +73,7 @@ EPC = function() {
         top: direction_secondary_y+"="+(total_y)+"px",
         left: direction_secondary_x+"="+(total_x)+"px"
       }, {
-        duration: 1200,
+        duration: duration,
         easing: "easeInOutExpo",
         queue: false
       });
@@ -201,7 +202,7 @@ jQuery(document).ready(function() {
 
         for(var i=1; i<=EPC.tilesPerRow(); i++) {
           if($("#img-" + i).closest("li").attr("rel") == cat) continue;
-          EPC.swapTiles(i, swappers.pop());          
+          EPC.swapTiles(i, swappers.pop(), 1000+(i*100));
         }
       }, 1000);
       setTimeout(function() {
@@ -218,12 +219,12 @@ jQuery(document).ready(function() {
             duration: 750
           })
         })
-      }, 2300);
+      }, 3000);
       setTimeout(function() {
         var rel = $("#img-1").attr("rel");
         $(".bg-grid-copy").fadeOut();
         $("#" + rel).fadeIn("slow");
-      }, 3100);
+      }, 3500);
     });
   
   $("#next-service").click(function() {
