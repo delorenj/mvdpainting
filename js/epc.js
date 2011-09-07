@@ -3,6 +3,16 @@ EPC = function() {
   var _copy = "";
   
   return {
+  //handle hash changes
+    onSectionMatch : function(section) {
+      console.log("Initializing Section: " + section);
+      $("li[rel='" + section + "']:first img.bw").click();
+    },
+    
+    hashChange : function(newHash, oldHash){
+      console.log("New Hash: " + newHash);
+    },
+  
     getCopy : function() {
       return _copy
     },
@@ -171,7 +181,9 @@ jQuery(document).ready(function() {
       $("li[rel='" + cat + "'] img.bw").stop().animate({"opacity": "1"}, "slow");
     })
     .click(function() {
+      console.log("Clicked!");
       var cat = $(this).closest("li").attr("rel");
+      hasher.setHash(cat);
       $(".bg-grid-copy").fadeOut("slow");
       EPC.setCopy(cat);
       $("li[rel='" + cat + "'] img.bw").stop().animate(
@@ -256,4 +268,12 @@ jQuery(document).ready(function() {
       })
     })    
   })
+  crossroads.addRoute("wallpaper");
+  crossroads.addRoute("paint");
+  crossroads.addRoute("carpentry");
+  crossroads.addRoute("other");
+  crossroads.routed.add(EPC.onSectionMatch);
+  hasher.initialized.add(crossroads.parse, crossroads); //parse initial hash
+  hasher.changed.add(crossroads.parse, crossroads); //parse hash changes
+  hasher.init();   
 });

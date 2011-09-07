@@ -94,6 +94,9 @@ function getHead($fonts = true) {
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.plugins.js"></script>
+    <script type="text/javascript" src="js/signals.js"></script>
+    <script type="text/javascript" src="js/crossroads.js"></script>
+    <script type="text/javascript" src="js/hasher.js"></script>
     <script type="text/javascript" src="js/epc.js"></script>';
   
   if($fonts) {
