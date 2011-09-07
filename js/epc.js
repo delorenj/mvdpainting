@@ -274,6 +274,6 @@ jQuery(document).ready(function() {
   crossroads.addRoute("other");
   crossroads.routed.add(EPC.onSectionMatch);
   hasher.initialized.add(crossroads.parse, crossroads); //parse initial hash
-  hasher.changed.add(crossroads.parse, crossroads); //parse hash changes
+//  hasher.changed.add(crossroads.parse, crossroads); //parse hash changes
   hasher.init();   
 });
