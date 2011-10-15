@@ -269,9 +269,9 @@ jQuery(document).ready(function() {
     })    
   })
   crossroads.addRoute("wallpaper");
-  crossroads.addRoute("paint");
-  crossroads.addRoute("carpentry");
-  crossroads.addRoute("other");
+  crossroads.addRoute("interior-paint");
+  crossroads.addRoute("exterior-paint");
+  crossroads.addRoute("power-washing");
   crossroads.routed.add(EPC.onSectionMatch);
   hasher.initialized.add(crossroads.parse, crossroads); //parse initial hash
 //  hasher.changed.add(crossroads.parse, crossroads); //parse hash changes

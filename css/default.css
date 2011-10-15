@@ -366,10 +366,10 @@ ul.menu li a {
   display:none;
   font-family: 'HarabaraRegular';
   color: #f1f1f1;
-  width: 65%;
+  width: 45%;
   position: absolute;
   top: 255px;
-  left: 40px;
+  left: 10%;
 }
 
 .bg-grid-copy h1 {
