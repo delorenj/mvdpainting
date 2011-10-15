@@ -32,10 +32,11 @@ shuffle($tiles);
       </div>
       <div id="banner-menu">        
         <ul class="menu">
-          <li class="active"><a href="index.php">Home</a></li>
-          <li><a href="gallery.php">Gallery</a></li>
-          <li><a href="about.php">About</a></li>
-          <li><a href="contact.php">Contact</a></li>          
+          <li><a href="#" onclick="EPC.onSectionMatch('home');">Home</a></li>
+          <li><a href="#" onclick="EPC.onSectionMatch('interior-paint');">Interior Paint</a></li>
+          <li><a href="#" onclick="EPC.onSectionMatch('exterior-paint');">Exterior Paint</a></li>
+          <li><a href="#" onclick="EPC.onSectionMatch('wallpaper');">Wallpaper</a></li>
+          <li><a href="index.php#/contact">Contact</a></li>
         </ul>
       </div>
       <div id="content">

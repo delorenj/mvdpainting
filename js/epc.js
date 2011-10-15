@@ -6,7 +6,11 @@ EPC = function() {
   //handle hash changes
     onSectionMatch : function(section) {
       console.log("Initializing Section: " + section);
-      $("li[rel='" + section + "']:first img.bw").click();
+      if(section == "home") {
+        EPC.shuffleTiles();
+      } else {
+        $("li[rel='" + section + "']:first img.bw").click();
+      }      
     },
     
     hashChange : function(newHash, oldHash){
@@ -98,6 +102,57 @@ EPC = function() {
       var tileWidth = 250;
       _tilesPerRow = Math.floor(windowWidth / tileWidth) > 6 ? 6 : Math.floor(windowWidth / tileWidth);
       $("#bg-grid").css("width", _tilesPerRow * tileWidth);
+    },
+    
+    shuffleTiles : function() {
+      var cat = "home";
+      hasher.setHash(cat);
+      $(".bg-grid-copy").fadeOut("slow");
+      EPC.setCopy(cat);
+      $("li img.bw").stop().animate({"opacity": "1"}, "slow");
+      $("#bg-grid li").stop().animate(
+        {
+          "opacity": "1"
+        },
+        {
+          duration: 750
+        }
+      );                
+      setTimeout(function() {
+        var arr = [];
+        var max = 25;
+        while(arr.length < EPC.tilesPerRow()){
+          var randomnumber=Math.ceil(Math.random()*max)
+          var found=false;
+          for(var i=0;i<arr.length;i++){
+            if(arr[i]==randomnumber){found=true;break}
+          }
+          if(!found)arr[arr.length]=randomnumber;
+        }        
+        for(var i=0; i<arr.length; i+=2) {
+          EPC.swapTiles(arr[i], arr[i+1], 1000+(i*100));
+        }
+      }, 1000);
+//      setTimeout(function() {
+//        $("#bg-grid ul li").each(function() {
+//          if(parseInt($(this).attr("id").split("-")[1]) <= EPC.tilesPerRow()) return 0;
+//          $(this).animate({
+//            opacity: "0.2"
+//          }, {
+//            duration: 500,
+//            queue: false
+//          }).find("img.bw").animate({
+//            opacity: "1"
+//          }, {
+//            duration: 750
+//          })
+//        })
+//      }, 3000);
+//      setTimeout(function() {
+//        var rel = $("#img-1").attr("rel");
+//        $(".bg-grid-copy").fadeOut();
+//        $("#" + rel).fadeIn("slow");
+//      }, 3500);      
     },
     
     init : function() {
@@ -268,6 +323,7 @@ jQuery(document).ready(function() {
       })
     })    
   })
+  crossroads.addRoute("home");
   crossroads.addRoute("wallpaper");
   crossroads.addRoute("interior-paint");
   crossroads.addRoute("exterior-paint");
