@@ -9,6 +9,7 @@ function fbe($msg) {
 
 switch($_SERVER["HTTP_HOST"]){
     case 'localhost':
+    case 'mvdpainting':
         define("IMAGE_PATH", "/mvdpainting/images/");
         define("IMAGE_URL", "http://localhost/mvdpainting/images/");
         break;

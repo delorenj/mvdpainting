@@ -305,7 +305,6 @@ select {
 
 #banner-menu {
   padding: 10px 0;
-  height: 40px;
   text-align: center;
 }
 
@@ -362,6 +361,63 @@ ul.menu li a {
   height: 250px;
 }
 
+.bg-grid-form {
+  display: none;
+  position: absolute;
+  width: 800px;
+  top: 30px;
+  left: 10%;
+  height: 400px;
+}
+
+.form-block {
+  width: 800px;
+}
+
+.l-form-block, .r-form-block {
+  float: left;
+}
+
+.l-form-block {
+  font-family: 'HarabaraRegular';
+  font-size: 2.13em;
+  color: #f1f1f1;    
+  width: 30%;
+}
+
+.r-form-block {
+  width: 70%;
+}
+
+input {
+  width: 400px;
+  margin: 8px;
+  padding: 5px;
+  font-family: arial, sans-serif;
+  font-size: 1.2em;
+  outline: none;
+}
+
+span.label {
+  position: relative;
+  left: -100px;
+  color: #f1f1f1 !important;
+  font-family: "HarabaraRegular";
+  font-size: 1.4em;
+}
+
+.focusField{
+  border: 4px solid #b32626;
+  background:#EFF5FF;
+  color:#000;
+}
+
+.idleField{
+  border: solid 4px #f1f1f1;
+  background:#EEE;
+  color: #6F6F6F;
+}
+
 .bg-grid-copy {
   display:none;
   font-family: 'HarabaraRegular';
@@ -380,4 +436,16 @@ ul.menu li a {
   font-family: 'arial', sans-serif;
   font-size: 1.5em;
   padding-top: 0.5em
+}
+
+.quote-link {
+  position: absolute;
+  right: 0;
+  bottom: -50px;
+}
+
+.quote-link a{
+  font-family: "HarabaraRegular";
+  font-size: 2em;
+  color: #f1f1f1;
 }

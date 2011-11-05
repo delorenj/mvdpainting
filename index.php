@@ -36,7 +36,8 @@ shuffle($tiles);
           <li><a href="#" onclick="EPC.onSectionMatch('interior-paint');">Interior Paint</a></li>
           <li><a href="#" onclick="EPC.onSectionMatch('exterior-paint');">Exterior Paint</a></li>
           <li><a href="#" onclick="EPC.onSectionMatch('wallpaper');">Wallpaper</a></li>
-          <li><a href="index.php#/contact">Contact</a></li>
+          <li><a href="#" onclick="EPC.onSectionMatch('power-washing');">Power Washing</a></li>
+          <li><a href="#" onclick="EPC.onSectionMatch('contact');">Contact</a></li>
         </ul>
       </div>
       <div id="content">
@@ -50,46 +51,66 @@ shuffle($tiles);
             <?php endforeach; ?>
           </ul>
         </div>
+        <div id="quote" class="bg-grid-form">
+          <div class="form-block">
+            <form id="quote-form" action="quote.php" method="POST">
+              <div class="l-form-block">
+                <h1>Contact Information</h1>
+              </div>
+              <div class="r-form-block">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td><input name="name" id="name" value="Name" type="text"></input><span class="label">Name</span></td>
+                    </tr>
+                    <tr>
+                      <td><input name="phone" id="phone" value="Phone Number" type="text"></input><span class="label">Phone</span></td>
+                    </tr>
+                    <tr>
+                      <td><input name="email" id="email" value="Email" type="text"></input><span class="label">Email</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </form>
+          </div>
+        </div>
         <div id="exterior-paint" class="bg-grid-copy">
           <h1>Exterior Paint</h1>
           <p>Painting the exterior of your home is one of the most effective ways to increase its value, but achieving the best results takes great care and skill. With more than 35 years of professional experience and unmatched attention to detail, M.V. DeLorenzo Painting & Decorating is eager to meet all of your exterior painting needs.</p>
           <p>Our expert craftsmen can refresh any surface, including siding, brick, masonry, and stone, and we can make your fences and trellises look tidy and new. No matter your needs, you can count on our experienced and dependable professionals to increase your property values with a flawless exterior paint job.</p>
+          <div class="quote-link">
+            <a href="#" onclick="EPC.onSectionMatch('quote');">Request a Quote</a>
+          </div>                  
         </div>
         <div id="interior-paint" class="bg-grid-copy">
           <h1>Interior Paint</h1>
-          <p>
-Choosing an interior paint contractor and decorator says you care about the appearance of your home and what it says about you. M.V. DeLorenzo Painting & Decorating provides your home with a finished look that says professional. 
-          </p>
-          <p>
-Our company offers unbeatable quality and attention to details. We have more than 35 years of experience providing the best interior painting services to our customers. 
-You can see our commitment to quality and craftsmanship in all of the small details
-          </p>
+          <p>Choosing an interior paint contractor and decorator says you care about the appearance of your home and what it says about you. M.V. DeLorenzo Painting & Decorating provides your home with a finished look that says professional.</p>
+          <p>Our company offers unbeatable quality and attention to details. We have more than 35 years of experience providing the best interior painting services to our customers. You can see our commitment to quality and craftsmanship in all of the small details</p>
+          <div class="quote-link">
+            <a href="#" onclick="EPC.onSectionMatch('quote');">Request a Quote</a>
+          </div>                            
         </div>        
         <div id="wallpaper" class="bg-grid-copy">
           <h1>Wallpaper</h1>
-          <p>
-Removing old wallpaper and applying a new wall covering requires professional experience and an artistic touch, because you want results you will be proud to live with and show off.
-With over 35 years experience, we are knowledgeable about every type of wall covering product and how to work with your interior surface to ensure superior quality and lasting beauty.
-          </p>
-          <p>
-Whether you need paper hanging or borders, or you want a more distinctive look using murals or custom graphics, you can rely on our hand-crafted detailing.
-You can count on us to work efficiently and neatly, respecting your time and your home.  
-          </p>
+          <p>Removing old wallpaper and applying a new wall covering requires professional experience and an artistic touch, because you want results you will be proud to live with and show off. With over 35 years experience, we are knowledgeable about every type of wall covering product and how to work with your interior surface to ensure superior quality and lasting beauty.</p>
+          <p>Whether you need paper hanging or borders, or you want a more distinctive look using murals or custom graphics, you can rely on our hand-crafted detailing. You can count on us to work efficiently and neatly, respecting your time and your home.  </p>
+          <div class="quote-link">
+            <a href="#" onclick="EPC.onSectionMatch('quote');">Request a Quote</a>
+          </div>                            
         </div>        
         <div id="power-washing" class="bg-grid-copy">
           <h1>Power Washing</h1>
-          <p>
-Your home is a major investment, and we know you take pride in it.  Whether it’s simply time to freshen up your siding or decks, or you’re planning a major painting or staining project, power washing ensures your house is entirely clean. 
-We’re a long-standing community business, and we know how to get your job done right.
-          </p>
-          <p>
-You can rely on us to provide superior quality work, quickly but also carefully.  
-When we’ve completed your power washing project, your house and decks will be clean, and so will the surrounding areas.
-          </p>
-        </div>        
+          <p>Your home is a major investment, and we know you take pride in it.  Whether it’s simply time to freshen up your siding or decks, or you’re planning a major painting or staining project, power washing ensures your house is entirely clean.  We’re a long-standing community business, and we know how to get your job done right.</p>
+          <p>You can rely on us to provide superior quality work, quickly but also carefully. When we’ve completed your power washing project, your house and decks will be clean, and so will the surrounding areas.</p>
+          <div class="quote-link">
+            <a href="#" onclick="EPC.onSectionMatch('quote');">Request a Quote</a>
+          </div>                            
+        </div>
       </div>
     </div>
   </body>
   <div id="fb-root"></div>
   <script src="http://connect.facebook.net/en_US/all.js#appId=171421066267048&amp;xfbml=1"></script>  
 </html>
+    
