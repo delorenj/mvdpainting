@@ -1,405 +1,3 @@
-/*
- * jQuery Orbit Plugin 1.2.3
- * www.ZURB.com/playground
- * Copyright 2010, ZURB
- * Free to use under the MIT license.
- * http://www.opensource.org/licenses/mit-license.php
-*/
-
-
-(function($) {
-
-    $.fn.orbit = function(options) {
-
-        //Defaults to extend options
-        var defaults = {  
-            animation: 'horizontal-push', 		// fade, horizontal-slide, vertical-slide, horizontal-push
-            animationSpeed: 600, 				// how fast animtions are
-            timer: true, 						// true or false to have the timer
-            advanceSpeed: 4000, 				// if timer is enabled, time between transitions 
-            pauseOnHover: false, 				// if you hover pauses the slider
-            startClockOnMouseOut: false, 		// if clock should start on MouseOut
-            startClockOnMouseOutAfter: 1000, 	// how long after MouseOut should the timer start again
-            directionalNav: true, 				// manual advancing directional navs
-            captions: true, 					// do you want captions?
-            captionAnimation: 'fade', 			// fade, slideOpen, none
-            captionAnimationSpeed: 600, 		// if so how quickly should they animate in
-            bullets: false,						// true or false to activate the bullet navigation
-            bulletThumbs: false,				// thumbnails for the bullets
-            bulletThumbLocation: '',			// location from this file where thumbs will be
-            afterSlideChange: function(){} 		// empty function 
-     	};  
-        
-        //Extend those options
-        var options = $.extend(defaults, options); 
-	
-        return this.each(function() {
-        
-// ==============
-// ! SETUP   
-// ==============
-        
-            //Global Variables
-            var activeSlide = 0,
-            	numberSlides = 0,
-            	orbitWidth,
-            	orbitHeight,
-            	locked;
-            
-            //Initialize
-            var orbit = $(this).addClass('orbit'),         
-            	orbitWrapper = orbit.wrap('<div class="orbit-wrapper" />').parent();
-            orbit.add(orbitWidth).width('1px').height('1px');
-	    	            
-            //Collect all slides and set slider size of largest image
-            var slides = orbit.children('img, a, div');
-            slides.each(function() {
-                var _slide = $(this),
-                	_slideWidth = _slide.width(),
-                	_slideHeight = _slide.height();
-                if(_slideWidth > orbit.width()) {
-	                orbit.add(orbitWrapper).width(_slideWidth);
-	                orbitWidth = orbit.width();	       			
-	            }
-	            if(_slideHeight > orbit.height()) {
-	                orbit.add(orbitWrapper).height(_slideHeight);
-	                orbitHeight = orbit.height();
-				}
-                numberSlides++;
-            });
-            
-            //Animation locking functions
-            function unlock() {
-                locked = false;
-            }
-            function lock() { 
-                locked = true;
-            }
-            
-            //If there is only a single slide remove nav, timer and bullets
-            if(slides.length == 1) {
-            	options.directionalNav = false;
-            	options.timer = false;
-            	options.bullets = false;
-            }
-            
-            //Set initial front photo z-index and fades it in
-            slides.eq(activeSlide)
-            	.css({"z-index" : 3})
-            	.fadeIn(function() {
-            		//brings in all other slides IF css declares a display: none
-            		slides.css({"display":"block"})
-            	});
-            
-// ==============
-// ! TIMER   
-// ==============
-
-            //Timer Execution
-            function startClock() {
-            	if(!options.timer  || options.timer == 'false') { 
-            		return false;
-            	//if timer is hidden, don't need to do crazy calculations
-            	} else if(timer.is(':hidden')) {
-		            clock = setInterval(function(e){
-						shift("next");  
-		            }, options.advanceSpeed);            		
-		        //if timer is visible and working, let's do some math
-            	} else {
-		            timerRunning = true;
-		            pause.removeClass('active')
-		            clock = setInterval(function(e){
-		                var degreeCSS = "rotate("+degrees+"deg)"
-		                degrees += 2
-		                rotator.css({ 
-		                    "-webkit-transform": degreeCSS,
-		                    "-moz-transform": degreeCSS,
-		                    "-o-transform": degreeCSS
-		                });
-		                if(degrees > 180) {
-		                    rotator.addClass('move');
-		                    mask.addClass('move');
-		                }
-		                if(degrees > 360) {
-		                    rotator.removeClass('move');
-		                    mask.removeClass('move');
-		                    degrees = 0;
-		                    shift("next");
-		                }
-		            }, options.advanceSpeed/180);
-				}
-	        }
-	        function stopClock() {
-	        	if(!options.timer || options.timer == 'false') {return false;} else {
-		            timerRunning = false;
-		            clearInterval(clock);
-		            pause.addClass('active');
-				}
-	        }  
-            
-            //Timer Setup
-            if(options.timer) {         	
-                var timerHTML = '<div class="timer"><span class="mask"><span class="rotator"></span></span><span class="pause"></span></div>'
-                orbitWrapper.append(timerHTML);
-                var timer = $('div.timer'),
-                	timerRunning;
-                if(timer.length != 0) {
-                    var rotator = $('div.timer span.rotator'),
-                    	mask = $('div.timer span.mask'),
-                    	pause = $('div.timer span.pause'),
-                    	degrees = 0,
-                    	clock; 
-                    startClock();
-                    timer.click(function() {
-                        if(!timerRunning) {
-                            startClock();
-                        } else { 
-                            stopClock();
-                        }
-                    });
-                    if(options.startClockOnMouseOut){
-                        var outTimer;
-                        orbitWrapper.mouseleave(function() {
-                            outTimer = setTimeout(function() {
-                                if(!timerRunning){
-                                    startClock();
-                                }
-                            }, options.startClockOnMouseOutAfter)
-                        })
-                        orbitWrapper.mouseenter(function() {
-                            clearTimeout(outTimer);
-                        })
-                    }
-                }
-            }  
-	        
-	        //Pause Timer on hover
-	        if(options.pauseOnHover) {
-		        orbitWrapper.mouseenter(function() {
-		        	stopClock(); 
-		        });
-		   	}
-            
-// ==============
-// ! CAPTIONS   
-// ==============
-                     
-            //Caption Setup
-            if(options.captions) {
-                var captionHTML = '<div class="orbit-caption"></div>';
-                orbitWrapper.append(captionHTML);
-                var caption = orbitWrapper.children('.orbit-caption');
-            	setCaption();
-            }
-			
-			//Caption Execution
-            function setCaption() {
-            	if(!options.captions || options.captions =="false") {
-            		return false; 
-            	} else {
-	            	var _captionLocation = slides.eq(activeSlide).data('caption'); //get ID from rel tag on image
-	            		_captionHTML = $(_captionLocation).html(); //get HTML from the matching HTML entity            		
-	            	//Set HTML for the caption if it exists
-	            	if(_captionHTML) {
-	            		caption
-		            		.attr('id',_captionLocation) // Add ID caption
-		                	.html(_captionHTML); // Change HTML in Caption 
-		                //Animations for Caption entrances
-		             	if(options.captionAnimation == 'none') {
-		             		caption.show();
-		             	}
-		             	if(options.captionAnimation == 'fade') {
-		             		caption.fadeIn(options.captionAnimationSpeed);
-		             	}
-		             	if(options.captionAnimation == 'slideOpen') {
-		             		caption.slideDown(options.captionAnimationSpeed);
-		             	}
-	            	} else {
-	            		//Animations for Caption exits
-	            		if(options.captionAnimation == 'none') {
-		             		caption.hide();
-		             	}
-		             	if(options.captionAnimation == 'fade') {
-		             		caption.fadeOut(options.captionAnimationSpeed);
-		             	}
-		             	if(options.captionAnimation == 'slideOpen') {
-		             		caption.slideUp(options.captionAnimationSpeed);
-		             	}
-	            	}
-				}
-            }
-            
-// ==================
-// ! DIRECTIONAL NAV   
-// ==================
-
-            //DirectionalNav { rightButton --> shift("next"), leftButton --> shift("prev");
-            if(options.directionalNav) {
-            	if(options.directionalNav == "false") {return false;}
-                var directionalNavHTML = '<div class="slider-nav"><span class="right">Right</span><span class="left">Left</span></div>';
-                orbitWrapper.append(directionalNavHTML);
-                var leftBtn = orbitWrapper.children('div.slider-nav').children('span.left'),
-                	rightBtn = orbitWrapper.children('div.slider-nav').children('span.right');
-                leftBtn.click(function() { 
-                    stopClock();
-                    shift("prev");
-                });
-                rightBtn.click(function() {
-                    stopClock();
-                    shift("next")
-                });
-            }
-            
-// ==================
-// ! BULLET NAV   
-// ==================
-            
-            //Bullet Nav Setup
-            if(options.bullets) { 
-            	var bulletHTML = '<ul class="orbit-bullets"></ul>';            	
-            	orbitWrapper.append(bulletHTML);
-            	var bullets = $('ul.orbit-bullets');
-            	for(i=0; i<numberSlides; i++) {
-            		var liMarkup = $('<li>'+(i+1)+'</li>');
-            		if(options.bulletThumbs) {
-            			var	thumbName = slides.eq(i).data('thumb');
-            			if(thumbName) {
-            				var liMarkup = $('<li class="has-thumb">'+i+'</li>')
-            				liMarkup.css({"background" : "url("+options.bulletThumbLocation+thumbName+") no-repeat"});
-            			}
-            		} 
-            		$('ul.orbit-bullets').append(liMarkup);
-            		liMarkup.data('index',i);
-            		liMarkup.click(function() {
-            			stopClock();
-            			shift($(this).data('index'));
-            		});
-            	}
-            	setActiveBullet();
-            }
-            
-            //Bullet Nav Execution
-        	function setActiveBullet() { 
-        		if(!options.bullets) {return false;} else {
-	        		bullets.children('li').removeClass('active').eq(activeSlide).addClass('active');
-	        	}
-        	}
-        	
-// ====================
-// ! SHIFT ANIMATIONS   
-// ====================
-            
-            //Animating the shift!
-            function shift(direction) {
-        	    //remember previous activeSlide
-                var prevActiveSlide = activeSlide,
-                	slideDirection = direction;
-                //exit function if bullet clicked is same as the current image
-                if(prevActiveSlide == slideDirection) {return false;}
-                //reset Z & Unlock
-                function resetAndUnlock() {
-                    slides
-                    	.eq(prevActiveSlide)
-                    	.css({"z-index" : 1});
-                    unlock();
-                    options.afterSlideChange.call(this);
-                }
-                if(slides.length == "1") {return false;}
-                if(!locked) {
-                    lock();
-					 //deduce the proper activeImage
-                    if(direction == "next") {
-                        activeSlide++
-                        if(activeSlide == numberSlides) {
-                            activeSlide = 0;
-                        }
-                    } else if(direction == "prev") {
-                        activeSlide--
-                        if(activeSlide < 0) {
-                            activeSlide = numberSlides-1;
-                        }
-                    } else {
-                        activeSlide = direction;
-                        if (prevActiveSlide < activeSlide) { 
-                            slideDirection = "next";
-                        } else if (prevActiveSlide > activeSlide) { 
-                            slideDirection = "prev"
-                        }
-                    }
-                    //set to correct bullet
-                     setActiveBullet();  
-                     
-                    //set previous slide z-index to one below what new activeSlide will be
-                    slides
-                    	.eq(prevActiveSlide)
-                    	.css({"z-index" : 2});    
-                    
-                    //fade
-                    if(options.animation == "fade") {
-                        slides
-                        	.eq(activeSlide)
-                        	.css({"opacity" : 0, "z-index" : 3})
-                        	.animate({"opacity" : 1}, options.animationSpeed, resetAndUnlock);
-                    }
-                    //horizontal-slide
-                    if(options.animation == "horizontal-slide") {
-                        if(slideDirection == "next") {
-                            slides
-                            	.eq(activeSlide)
-                            	.css({"left": orbitWidth, "z-index" : 3})
-                            	.animate({"left" : 0}, options.animationSpeed, resetAndUnlock);
-                        }
-                        if(slideDirection == "prev") {
-                            slides
-                            	.eq(activeSlide)
-                            	.css({"left": -orbitWidth, "z-index" : 3})
-                            	.animate({"left" : 0}, options.animationSpeed, resetAndUnlock);
-                        }
-                    }
-                    //vertical-slide
-                    if(options.animation == "vertical-slide") { 
-                        if(slideDirection == "prev") {
-                            slides
-                            	.eq(activeSlide)
-                            	.css({"top": orbitHeight, "z-index" : 3})
-                            	.animate({"top" : 0}, options.animationSpeed, resetAndUnlock);
-                        }
-                        if(slideDirection == "next") {
-                            slides
-                            	.eq(activeSlide)
-                            	.css({"top": -orbitHeight, "z-index" : 3})
-                            	.animate({"top" : 0}, options.animationSpeed, resetAndUnlock);
-                        }
-                    }
-                    //push-over
-                    if(options.animation == "horizontal-push") {
-                        if(slideDirection == "next") {
-                            slides
-                            	.eq(activeSlide)
-                            	.css({"left": orbitWidth, "z-index" : 3})
-                            	.animate({"left" : 0}, options.animationSpeed, resetAndUnlock);
-                            slides
-                            	.eq(prevActiveSlide)
-                            	.animate({"left" : -orbitWidth}, options.animationSpeed);
-                        }
-                        if(slideDirection == "prev") {
-                            slides
-                            	.eq(activeSlide)
-                            	.css({"left": -orbitWidth, "z-index" : 3})
-                            	.animate({"left" : 0}, options.animationSpeed, resetAndUnlock);
-							slides
-                            	.eq(prevActiveSlide)
-                            	.animate({"left" : orbitWidth}, options.animationSpeed);
-                        }
-                    }
-                    setCaption();
-                } //lock
-            }//orbit function
-        });//each call
-    }//orbit plugin call
-})(jQuery);
-
-
 /*!
  * jQuery Swapsie Plugin
  * Examples and documentation at: http://biostall.com/swap-and-re-order-divs-smoothly-using-jquery-swapsie-plugin
@@ -524,648 +122,922 @@ var swapping = false;
 })(jQuery);
 
 
- /*
- * jQuery UI selectmenu
+/*!
+ * jQuery Form Plugin
+ * version: 2.87 (20-OCT-2011)
+ * @requires jQuery v1.3.2 or later
  *
- * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
- *
- * http://docs.jquery.com/UI
+ * Examples and documentation at: http://malsup.com/jquery/form/
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
  */
+;(function($) {
 
-(function($) {
+/*
+	Usage Note:
+	-----------
+	Do not use both ajaxSubmit and ajaxForm on the same form.  These
+	functions are intended to be exclusive.  Use ajaxSubmit if you want
+	to bind your own submit handler to the form.  For example,
 
-$.widget("ui.selectmenu", {
-    _init: function() {
-        var self = this, o = this.options;
-        
-        //quick array of button and menu id's
-        this.ids = [this.element.attr('id') + '-' + 'button', this.element.attr('id') + '-' + 'menu'];
-        
-        //define safe mouseup for future toggling
-        this._safemouseup = true;
-        
-        //create menu button wrapper
-        this.newelement = $('<a class="'+ this.widgetBaseClass +' ui-widget ui-state-default ui-corner-all" id="'+this.ids[0]+'" role="button" href="#" aria-haspopup="true" aria-owns="'+this.ids[1]+'"></a>')
-            .insertAfter(this.element);
-        
-        //transfer tabindex
-        var tabindex = this.element.attr('tabindex');
-        if(tabindex){this.newelement.attr('tabindex', tabindex);}
-        
-        //save reference to select in data for ease in calling methods
-        this.newelement.data('selectelement', this.element);
-        
-        //menu icon
-        this.selectmenuIcon = $('<span class="'+ this.widgetBaseClass +'-icon ui-icon"></span>')
-            .prependTo(this.newelement)
-            .addClass( (o.style == "popup")? 'ui-icon-triangle-2-n-s' : 'ui-icon-triangle-1-s' );   
+	$(document).ready(function() {
+		$('#myForm').bind('submit', function(e) {
+			e.preventDefault(); // <-- important
+			$(this).ajaxSubmit({
+				target: '#output'
+			});
+		});
+	});
 
-            
-        //make associated form label trigger focus
-        $('label[for='+this.element.attr('id')+']')
-            .attr('for', this.ids[0])
-            .bind('click', function(){
-                self.newelement[0].focus();
-                return false;
-            }); 
+	Use ajaxForm when you want the plugin to manage all the event binding
+	for you.  For example,
 
-        //click toggle for menu visibility
-        this.newelement
-            .bind('mousedown', function(event){
-                self._toggle(event);
-                //make sure a click won't open/close instantly
-                if(o.style == "popup"){
-                    self._safemouseup = false;
-                    setTimeout(function(){self._safemouseup = true;}, 300);
-                }   
-                return false;
-            })
-            .bind('click',function(){
-                return false;
-            })
-            .keydown(function(event){
-                var ret = true;
-                switch (event.keyCode) {
-                    case $.ui.keyCode.ENTER:
-                        ret = true;
-                        break;
-                    case $.ui.keyCode.SPACE:
-                        ret = false;
-                        self._toggle(event);    
-                        break;
-                    case $.ui.keyCode.UP:
-                    case $.ui.keyCode.LEFT:
-                        ret = false;
-                        self._moveSelection(-1);
-                        break;
-                    case $.ui.keyCode.DOWN:
-                    case $.ui.keyCode.RIGHT:
-                        ret = false;
-                        self._moveSelection(1);
-                        break;  
-                    case $.ui.keyCode.TAB:
-                        ret = true;
-                        break;  
-                    default:
-                        ret = false;
-                        self._typeAhead(event.keyCode, 'mouseup');
-                        break;  
-                }
-                return ret;
-            })
-            .bind('mouseover focus', function(){ 
-                $(this).addClass(self.widgetBaseClass+'-focus ui-state-hover'); 
-            })
-            .bind('mouseout blur', function(){  
-                $(this).removeClass(self.widgetBaseClass+'-focus ui-state-hover'); 
-            });
-        
-        //document click closes menu
-        $(document)
-            .mousedown(function(event){
-                self.close(event);
-            });
+	$(document).ready(function() {
+		$('#myForm').ajaxForm({
+			target: '#output'
+		});
+	});
 
-        //change event on original selectmenu
-        this.element
-            .click(function(){this._refreshValue();})
-            .focus(function(){this.newelement[0].focus();});
-        
-        //create menu portion, append to body
-        var cornerClass = (o.style == "dropdown")? " ui-corner-bottom" : " ui-corner-all"
-        this.list = $('<ul class="' + self.widgetBaseClass + '-menu ui-widget ui-widget-content'+cornerClass+'" aria-hidden="true" role="listbox" aria-labelledby="'+this.ids[0]+'" id="'+this.ids[1]+'"></ul>').appendTo('body');              
-        
-        //serialize selectmenu element options  
-        var selectOptionData = [];
-        this.element
-            .find('option')
-            .each(function(){
-                selectOptionData.push({
-                    value: $(this).attr('value'),
-                    text: self._formatText(jQuery(this).text()),
-                    selected: $(this).attr('selected'),
-                    classes: $(this).attr('class'),
-                    parentOptGroup: $(this).parent('optgroup').attr('label')
-                });
-            });     
-                
-        //active state class is only used in popup style
-        var activeClass = (self.options.style == "popup") ? " ui-state-active" : "";
-        
-        //write li's
-        for(var i in selectOptionData){
-            var thisLi = $('<li role="presentation"><a href="#" tabindex="-1" role="option" aria-selected="false">'+ selectOptionData[i].text +'</a></li>')
-                .data('index',i)
-                .addClass(selectOptionData[i].classes)
-                .data('optionClasses', selectOptionData[i].classes|| '')
-                .mouseup(function(event){
-                        if(self._safemouseup){
-                            var changed = $(this).data('index') != self._selectedIndex();
-                            self.value($(this).data('index'));
-                            self.select(event);
-                            if(changed){self.change(event);}
-                            self.close(event,true);
-                        }
-                    return false;
-                })
-                .click(function(){
-                    return false;
-                })
-                .bind('mouseover focus', function(){ 
-                    self._selectedOptionLi().addClass(activeClass); 
-                    self._focusedOptionLi().removeClass(self.widgetBaseClass+'-item-focus ui-state-hover'); 
-                    $(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
-                })
-                .bind('mouseout blur', function(){ 
-                    if($(this).is( self._selectedOptionLi() )){$(this).addClass(activeClass);}
-                    $(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
-                });
-                
-            //optgroup or not...
-            if(selectOptionData[i].parentOptGroup){
-                var optGroupName = self.widgetBaseClass + '-group-' + selectOptionData[i].parentOptGroup;
-                if(this.list.find('li.' + optGroupName).size()){
-                    this.list.find('li.' + optGroupName + ':last ul').append(thisLi);
-                }
-                else{
-                    $('<li role="presentation" class="'+self.widgetBaseClass+'-group '+optGroupName+'"><span class="'+self.widgetBaseClass+'-group-label">'+selectOptionData[i].parentOptGroup+'</span><ul></ul></li>')
-                        .appendTo(this.list)
-                        .find('ul')
-                        .append(thisLi);
-                }
-            }
-            else{
-                thisLi.appendTo(this.list);
-            }
-            
-            //this allows for using the scrollbar in an overflowed list
-            this.list.bind('mousedown mouseup', function(){return false;});
-            
-            //append icon if option is specified
-            if(o.icons){
-                for(var j in o.icons){
-                    if(thisLi.is(o.icons[j].find)){
-                        thisLi
-                            .data('optionClasses', selectOptionData[i].classes + ' ' + self.widgetBaseClass + '-hasIcon')
-                            .addClass(self.widgetBaseClass + '-hasIcon');
-                        var iconClass = o.icons[j].icon || "";
-                        
-                        thisLi
-                            .find('a:eq(0)')
-                            .prepend('<span class="'+self.widgetBaseClass+'-item-icon ui-icon '+iconClass + '"></span>');
-                    }
-                }
-            }
-        }   
-        
-        //add corners to top and bottom menu items
-        this.list.find('li:last').addClass("ui-corner-bottom");
-        if(o.style == 'popup'){this.list.find('li:first').addClass("ui-corner-top");}
-        
-        //transfer classes to selectmenu and list
-        if(o.transferClasses){
-            var transferClasses = this.element.attr('class') || ''; 
-            this.newelement.add(this.list).addClass(transferClasses);
-        }
-        
-        //original selectmenu width
-        var selectWidth = this.element.width();
-        
-        //set menu button width
-        this.newelement.width( (o.width) ? o.width : selectWidth);
-        
-        //set menu width to either menuWidth option value, width option value, or select width 
-        if(o.style == 'dropdown'){this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width : selectWidth));}
-        else {this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width - o.handleWidth : selectWidth - o.handleWidth));}   
-        
-        //set max height from option 
-        if(o.maxHeight && o.maxHeight < this.list.height()){this.list.height(o.maxHeight);}   
-        
-        //save reference to actionable li's (not group label li's)
-        this._optionLis = this.list.find('li:not(.'+ self.widgetBaseClass +'-group)');
-                
-        //transfer menu click to menu button
-        this.list
-            .keydown(function(event){
-                var ret = true;
-                switch (event.keyCode) {
-                    case $.ui.keyCode.UP:
-                    case $.ui.keyCode.LEFT:
-                        ret = false;
-                        self._moveFocus(-1);
-                        break;
-                    case $.ui.keyCode.DOWN:
-                    case $.ui.keyCode.RIGHT:
-                        ret = false;
-                        self._moveFocus(1);
-                        break;  
-                    case $.ui.keyCode.HOME:
-                        ret = false;
-                        self._moveFocus(':first');
-                        break;  
-                    case $.ui.keyCode.PAGE_UP:
-                        ret = false;
-                        self._scrollPage('up');
-                        break;  
-                    case $.ui.keyCode.PAGE_DOWN:
-                        ret = false;
-                        self._scrollPage('down');
-                        break;
-                    case $.ui.keyCode.END:
-                        ret = false;
-                        self._moveFocus(':last');
-                        break;          
-                    case $.ui.keyCode.ENTER:
-                    case $.ui.keyCode.SPACE:
-                        ret = false;
-                        self.close(event,true);
-                        $(event.target).parents('li:eq(0)').trigger('mouseup');
-                        break;      
-                    case $.ui.keyCode.TAB:
-                        ret = true;
-                        self.close(event,true);
-                        break;  
-                    case $.ui.keyCode.ESCAPE:
-                        ret = false;
-                        self.close(event,true);
-                        break;  
-                    default:
-                        ret = false;
-                        self._typeAhead(event.keyCode,'focus');
-                        break;      
-                }
-                return ret;
-            });
-            
-        //selectmenu style
-        if(o.style == 'dropdown'){
-            this.newelement
-                .addClass(self.widgetBaseClass+"-dropdown");
-            this.list
-                .addClass(self.widgetBaseClass+"-menu-dropdown");   
-        }
-        else {
-            this.newelement
-                .addClass(self.widgetBaseClass+"-popup");
-            this.list
-                .addClass(self.widgetBaseClass+"-menu-popup");  
-        }
-        
-        //append status span to button
-        this.newelement.prepend('<span class="'+self.widgetBaseClass+'-status">'+ selectOptionData[this._selectedIndex()].text +'</span>');
-        
-        //hide original selectmenu element
-        this.element.hide();
-        
-        //transfer disabled state
-        if(this.element.attr('disabled') == true){this.disable();}
-        
-        //update value
-        this.value(this._selectedIndex());
-    },
-    destroy: function() {
-        this.element.removeData(this.widgetName)
-            .removeClass(this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled')
-            .removeAttr('aria-disabled');
-    
-        //unbind click on label, reset its for attr
-        $('label[for='+this.newelement.attr('id')+']')
-            .attr('for',this.element.attr('id'))
-            .unbind('click');
-        this.newelement.remove();
-        this.list.remove();
-        this.element.show();    
-    },
-    _typeAhead: function(code, eventType){
-        var self = this;
-        //define self._prevChar if needed
-        if(!self._prevChar){self._prevChar = ['',0];}
-        var C = String.fromCharCode(code);
-        c = C.toLowerCase();
-        var focusFound = false;
-        function focusOpt(elem, ind){
-            focusFound = true;
-            $(elem).trigger(eventType);
-            self._prevChar[1] = ind;
-        };
-        this.list.find('li a').each(function(i){    
-            if(!focusFound){
-                var thisText = $(this).text();
-                if( thisText.indexOf(C) == 0 || thisText.indexOf(c) == 0){
-                        if(self._prevChar[0] == C){
-                            if(self._prevChar[1] < i){focusOpt(this,i);}  
-                        }
-                        else{focusOpt(this,i);}   
-                }
-            }
-        });
-        this._prevChar[0] = C;
-    },
-    _uiHash: function(){
-        return {
-            value: this.value()
-        };
-    },
-    open: function(event){
-        var self = this;
-        var disabledStatus = this.newelement.attr("aria-disabled");
-        if(disabledStatus != 'true'){
-            this._refreshPosition();
-            this._closeOthers(event);
-            this.newelement
-                .addClass('ui-state-active');
-            
-            this.list
-                .appendTo('body')
-                .addClass(self.widgetBaseClass + '-open')
-                .attr('aria-hidden', false)
-                .find('li:not(.'+ self.widgetBaseClass +'-group):eq('+ this._selectedIndex() +') a')[0].focus();    
-            if(this.options.style == "dropdown"){this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');} 
-            this._refreshPosition();
-            this._trigger("open", event, this._uiHash());
-        }
-    },
-    close: function(event, retainFocus){
-        if(this.newelement.is('.ui-state-active')){
-            this.newelement
-                .removeClass('ui-state-active');
-            this.list
-                .attr('aria-hidden', true)
-                .removeClass(this.widgetBaseClass+'-open');
-            if(this.options.style == "dropdown"){this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all');}
-            if(retainFocus){this.newelement[0].focus();}    
-            this._trigger("close", event, this._uiHash());
-        }
-    },
-    change: function(event) {
-        this.element.trigger('change');
-        this._trigger("change", event, this._uiHash());
-    },
-    select: function(event) {
-        this._trigger("select", event, this._uiHash());
-    },
-    _closeOthers: function(event){
-        $('.'+ this.widgetBaseClass +'.ui-state-active').not(this.newelement).each(function(){
-            $(this).data('selectelement').selectmenu('close',event);
-        });
-        $('.'+ this.widgetBaseClass +'.ui-state-hover').trigger('mouseout');
-    },
-    _toggle: function(event,retainFocus){
-        if(this.list.is('.'+ this.widgetBaseClass +'-open')){this.close(event,retainFocus);}
-        else {this.open(event);}
-    },
-    _formatText: function(text){
-        return this.options.format ? this.options.format(text) : text;
-    },
-    _selectedIndex: function(){
-        return this.element[0].selectedIndex;
-    },
-    _selectedOptionLi: function(){
-        return this._optionLis.eq(this._selectedIndex());
-    },
-    _focusedOptionLi: function(){
-        return this.list.find('.'+ this.widgetBaseClass +'-item-focus');
-    },
-    _moveSelection: function(amt){
-        var currIndex = parseInt(this._selectedOptionLi().data('index'), 10);
-        var newIndex = currIndex + amt;
-        return this._optionLis.eq(newIndex).trigger('mouseup');
-    },
-    _moveFocus: function(amt){
-        if(!isNaN(amt)){
-            var currIndex = parseInt(this._focusedOptionLi().data('index'), 10);
-            var newIndex = currIndex + amt;
-        }
-        else {var newIndex = parseInt(this._optionLis.filter(amt).data('index'), 10);}
-        
-        if(newIndex < 0){newIndex = 0;}
-        if(newIndex > this._optionLis.size()-1){
-            newIndex =  this._optionLis.size()-1;
-        }
-        var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
-        
-        this._focusedOptionLi().find('a:eq(0)').attr('id','');
-        this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID)[0].focus();
-        this.list.attr('aria-activedescendant', activeID);
-    },
-    _scrollPage: function(direction){
-        var numPerPage = Math.floor(this.list.outerHeight() / this.list.find('li:first').outerHeight());
-        numPerPage = (direction == 'up') ? -numPerPage : numPerPage;
-        this._moveFocus(numPerPage);
-    },
-    _setData: function(key, value) {
-        this.options[key] = value;
-        if (key == 'disabled') {
-            this.close();
-            this.element
-                .add(this.newelement)
-                .add(this.list)
-                    [value ? 'addClass' : 'removeClass'](
-                        this.widgetBaseClass + '-disabled' + ' ' +
-                        this.namespace + '-state-disabled')
-                    .attr("aria-disabled", value);
-        }
-    },
-    value: function(newValue) {
-        if (arguments.length) {
-            this.element[0].selectedIndex = newValue;
-            this._refreshValue();
-            this._refreshPosition();
-        }
-        return this.element[0].selectedIndex;
-    },
-    _refreshValue: function() {
-        var activeClass = (this.options.style == "popup") ? " ui-state-active" : "";
-        var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
-        //deselect previous
-        this.list
-            .find('.'+ this.widgetBaseClass +'-item-selected')
-            .removeClass(this.widgetBaseClass + "-item-selected" + activeClass)
-            .find('a')
-            .attr('aria-selected', 'false')
-            .attr('id', '');
-        //select new
-        this._selectedOptionLi()
-            .addClass(this.widgetBaseClass + "-item-selected"+activeClass)
-            .find('a')
-            .attr('aria-selected', 'true')
-            .attr('id', activeID);
-            
-        //toggle any class brought in from option
-        var currentOptionClasses = this.newelement.data('optionClasses') ? this.newelement.data('optionClasses') : "";
-        var newOptionClasses = this._selectedOptionLi().data('optionClasses') ? this._selectedOptionLi().data('optionClasses') : "";
-        this.newelement
-            .removeClass(currentOptionClasses)
-            .data('optionClasses', newOptionClasses)
-            .addClass( newOptionClasses )
-            .find('.'+this.widgetBaseClass+'-status')
-            .html( 
-                this._selectedOptionLi()
-                    .find('a:eq(0)')
-                    .html() 
-            );
-            
-        this.list.attr('aria-activedescendant', activeID)
-    },
-    _refreshPosition: function(){   
-        //set left value
-        this.list.css('left', this.newelement.offset().left);
-        
-        //set top value
-        var menuTop = this.newelement.offset().top;
-        var scrolledAmt = this.list[0].scrollTop;
-        this.list.find('li:lt('+this._selectedIndex()+')').each(function(){
-            scrolledAmt -= $(this).outerHeight();
-        });
-        
-        if(this.newelement.is('.'+this.widgetBaseClass+'-popup')){
-            menuTop+=scrolledAmt; 
-            this.list.css('top', menuTop); 
-        }   
-        else { 
-            menuTop += this.newelement.height();
-            this.list.css('top', menuTop); 
-        }
-    }
-});
+	When using ajaxForm, the ajaxSubmit function will be invoked for you
+	at the appropriate time.
+*/
 
-$.extend($.ui.selectmenu, {
-    getter: "value",
-    version: "@VERSION",
-    eventPrefix: "selectmenu",
-    defaults: {
-        transferClasses: true,
-        style: 'popup', 
-        width: null, 
-        menuWidth: null, 
-        handleWidth: 26, 
-        maxHeight: null,
-        icons: null, 
-        format: null
-    }
-});
-
-})(jQuery);
-
-	jQuery.fn.highlight = function(selector, className, eventStart, eventEnd){
+/**
+ * ajaxSubmit() provides a mechanism for immediately submitting
+ * an HTML form using AJAX.
+ */
+$.fn.ajaxSubmit = function(options) {
+	// fast fail if nothing selected (http://dev.jquery.com/ticket/2752)
+	if (!this.length) {
+		log('ajaxSubmit: skipping submit process - no element selected');
+		return this;
+	}
 	
-		// variables
-			var className = className || 'highlight';
-			if(eventStart == undefined && eventEnd == undefined)
-			{
-				var eventStart = 'mouseover';
-				var eventEnd = 'mouseout';
-			}
-			else if(eventStart == eventEnd || eventStart != undefined && eventEnd == undefined)
-			{
-				var toggle = true;
-			}
+	var method, action, url, $form = this;
+
+	if (typeof options == 'function') {
+		options = { success: options };
+	}
+
+	method = this.attr('method');
+	action = this.attr('action');
+	url = (typeof action === 'string') ? $.trim(action) : '';
+	url = url || window.location.href || '';
+	if (url) {
+		// clean url (don't include hash vaue)
+		url = (url.match(/^([^#]+)/)||[])[1];
+	}
+
+	options = $.extend(true, {
+		url:  url,
+		success: $.ajaxSettings.success,
+		type: method || 'GET',
+		iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'
+	}, options);
+
+	// hook for manipulating the form data before it is extracted;
+	// convenient for use with rich editors like tinyMCE or FCKEditor
+	var veto = {};
+	this.trigger('form-pre-serialize', [this, options, veto]);
+	if (veto.veto) {
+		log('ajaxSubmit: submit vetoed via form-pre-serialize trigger');
+		return this;
+	}
+
+	// provide opportunity to alter form data before it is serialized
+	if (options.beforeSerialize && options.beforeSerialize(this, options) === false) {
+		log('ajaxSubmit: submit aborted via beforeSerialize callback');
+		return this;
+	}
+
+   var traditional = options.traditional;
+   if ( traditional === undefined ) {
+      traditional = $.ajaxSettings.traditional;
+   }
+   
+	var qx,n,v,a = this.formToArray(options.semantic);
+	if (options.data) {
+		options.extraData = options.data;
+      qx = $.param(options.data, traditional);
+	}
+
+	// give pre-submit callback an opportunity to abort the submit
+	if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) {
+		log('ajaxSubmit: submit aborted via beforeSubmit callback');
+		return this;
+	}
+
+	// fire vetoable 'validate' event
+	this.trigger('form-submit-validate', [a, this, options, veto]);
+	if (veto.veto) {
+		log('ajaxSubmit: submit vetoed via form-submit-validate trigger');
+		return this;
+	}
+
+	var q = $.param(a, traditional);
+   if (qx)
+      q = ( q ? (q + '&' + qx) : qx );
+
+	if (options.type.toUpperCase() == 'GET') {
+		options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
+		options.data = null;  // data is null for 'get'
+	}
+	else {
+		options.data = q; // data is the query string for 'post'
+	}
+
+	var callbacks = [];
+	if (options.resetForm) {
+		callbacks.push(function() { $form.resetForm(); });
+	}
+	if (options.clearForm) {
+		callbacks.push(function() { $form.clearForm(options.includeHidden); });
+	}
+
+	// perform a load on the target only if dataType is not provided
+	if (!options.dataType && options.target) {
+		var oldSuccess = options.success || function(){};
+		callbacks.push(function(data) {
+			var fn = options.replaceTarget ? 'replaceWith' : 'html';
+			$(options.target)[fn](data).each(oldSuccess, arguments);
+		});
+	}
+	else if (options.success) {
+		callbacks.push(options.success);
+	}
+
+	options.success = function(data, status, xhr) { // jQuery 1.4+ passes xhr as 3rd arg
+		var context = options.context || options;   // jQuery 1.4+ supports scope context 
+		for (var i=0, max=callbacks.length; i < max; i++) {
+			callbacks[i].apply(context, [data, status, xhr || $form, $form]);
+		}
+	};
+
+	// are there files to upload?
+	var fileInputs = $('input:file', this).length > 0;
+	var mp = 'multipart/form-data';
+	var multipart = ($form.attr('enctype') == mp || $form.attr('encoding') == mp);
+
+	// options.iframe allows user to force iframe mode
+	// 06-NOV-09: now defaulting to iframe mode if file input is detected
+   if (options.iframe !== false && (fileInputs || options.iframe || multipart)) {
+	   // hack to fix Safari hang (thanks to Tim Molendijk for this)
+	   // see:  http://groups.google.com/group/jquery-dev/browse_thread/thread/36395b7ab510dd5d
+	   if (options.closeKeepAlive) {
+		   $.get(options.closeKeepAlive, function() { fileUpload(a); });
+		}
+	   else {
+		   fileUpload(a);
+		}
+   }
+   else {
+		// IE7 massage (see issue 57)
+		if ($.browser.msie && method == 'get' && typeof options.type === "undefined") {
+			var ieMeth = $form[0].getAttribute('method');
+			if (typeof ieMeth === 'string')
+				options.type = ieMeth;
+		}
+		$.ajax(options);
+   }
+
+	// fire 'notify' event
+	this.trigger('form-submit-notify', [this, options]);
+	return this;
+
+
+	// private function for handling file uploads (hat tip to YAHOO!)
+	function fileUpload(a) {
+		var form = $form[0], el, i, s, g, id, $io, io, xhr, sub, n, timedOut, timeoutHandle;
+        var useProp = !!$.fn.prop;
+
+        if (a) {
+            if ( useProp ) {
+            	// ensure that every serialized input is still enabled
+              	for (i=0; i < a.length; i++) {
+                    el = $(form[a[i].name]);
+                    el.prop('disabled', false);
+              	}
+            } else {
+              	for (i=0; i < a.length; i++) {
+                    el = $(form[a[i].name]);
+                    el.removeAttr('disabled');
+              	}
+            };
+        }
+
+		if ($(':input[name=submit],:input[id=submit]', form).length) {
+			// if there is an input with a name or id of 'submit' then we won't be
+			// able to invoke the submit fn on the form (at least not x-browser)
+			alert('Error: Form elements must not have name or id of "submit".');
+			return;
+		}
 		
-		// code
-			this.each
-			(
-				function()
-				{
-				
-					var tagName	= this.tagName.toLowerCase();
-					
-					if(tagName == 'form')
-					{
-					
-						selector		= selector || 'li';
-						var elements 	= jQuery("textarea, select, multi-select, :text, :image, :password, :radio, :checkbox, :file", this);
-	
-						elements.bind
-						(
-							'focus', 
-							function()
-							{
-								var parents	= jQuery(this).parents(selector);
-								var parent	= jQuery(parents.get(0));
-								parent.addClass(className);
-							}
-						);
-							
-						elements.bind
-						(
-							'blur', 
-							function()
-							{
-								var parents	= jQuery(this).parents(selector);
-								var parent	= jQuery(parents.get(0));
-								parent.removeClass(className);
-							}
-						);
+		s = $.extend(true, {}, $.ajaxSettings, options);
+		s.context = s.context || s;
+		id = 'jqFormIO' + (new Date().getTime());
+		if (s.iframeTarget) {
+			$io = $(s.iframeTarget);
+			n = $io.attr('name');
+			if (n == null)
+			 	$io.attr('name', id);
+			else
+				id = n;
+		}
+		else {
+			$io = $('<iframe name="' + id + '" src="'+ s.iframeSrc +'" />');
+			$io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
+		}
+		io = $io[0];
 
-					}
-					
-					else
-					{
-	
-	
-						if(tagName.match(/^(table|tbody)$/) != null)
-						{
-							selector = selector || 'tr';
-						}
-						else if(tagName.match(/^(ul|ol)$/) != null)
-						{
-							selector = selector || 'li';
-						}
-						else
-						{
-							selector = '*';
-						}
-							
-						var elements = jQuery(selector, this);
-	
-						if(toggle)
-						{
-							elements.bind
-								(
-								eventStart, 
-								function()
-								{
-									if($(this).hasClass(className))
-									{
-										$(this).removeClass(className);
-									}
-									else
-									{
-										$(this).addClass(className);
-									}
-								}
-							);
-						
-						}
-							
-						else
-						{
-							elements.bind
-							(
-								eventStart, 
-								function()
-								{
-									$(this).addClass(className);
-								}
-							);
-							
-							elements.bind
-							(
-								eventEnd, 
-								function()
-								{
-									$(this).removeClass(className);
-								}
-							);
-						}
-				
+
+		xhr = { // mock object
+			aborted: 0,
+			responseText: null,
+			responseXML: null,
+			status: 0,
+			statusText: 'n/a',
+			getAllResponseHeaders: function() {},
+			getResponseHeader: function() {},
+			setRequestHeader: function() {},
+			abort: function(status) {
+				var e = (status === 'timeout' ? 'timeout' : 'aborted');
+				log('aborting upload... ' + e);
+				this.aborted = 1;
+				$io.attr('src', s.iframeSrc); // abort op in progress
+				xhr.error = e;
+				s.error && s.error.call(s.context, xhr, e, status);
+				g && $.event.trigger("ajaxError", [xhr, s, e]);
+				s.complete && s.complete.call(s.context, xhr, e);
+			}
+		};
+
+		g = s.global;
+		// trigger ajax global events so that activity/block indicators work like normal
+		if (g && ! $.active++) {
+			$.event.trigger("ajaxStart");
+		}
+		if (g) {
+			$.event.trigger("ajaxSend", [xhr, s]);
+		}
+
+		if (s.beforeSend && s.beforeSend.call(s.context, xhr, s) === false) {
+			if (s.global) {
+				$.active--;
+			}
+			return;
+		}
+		if (xhr.aborted) {
+			return;
+		}
+
+		// add submitting element to data if we know it
+		sub = form.clk;
+		if (sub) {
+			n = sub.name;
+			if (n && !sub.disabled) {
+				s.extraData = s.extraData || {};
+				s.extraData[n] = sub.value;
+				if (sub.type == "image") {
+					s.extraData[n+'.x'] = form.clk_x;
+					s.extraData[n+'.y'] = form.clk_y;
+				}
+			}
+		}
+		
+		var CLIENT_TIMEOUT_ABORT = 1;
+		var SERVER_ABORT = 2;
+
+		function getDoc(frame) {
+			var doc = frame.contentWindow ? frame.contentWindow.document : frame.contentDocument ? frame.contentDocument : frame.document;
+			return doc;
+		}
+		
+		// take a breath so that pending repaints get some cpu time before the upload starts
+		function doSubmit() {
+			// make sure form attrs are set
+			var t = $form.attr('target'), a = $form.attr('action');
+
+			// update form attrs in IE friendly way
+			form.setAttribute('target',id);
+			if (!method) {
+				form.setAttribute('method', 'POST');
+			}
+			if (a != s.url) {
+				form.setAttribute('action', s.url);
+			}
+
+			// ie borks in some cases when setting encoding
+			if (! s.skipEncodingOverride && (!method || /post/i.test(method))) {
+				$form.attr({
+					encoding: 'multipart/form-data',
+					enctype:  'multipart/form-data'
+				});
+			}
+
+			// support timout
+			if (s.timeout) {
+				timeoutHandle = setTimeout(function() { timedOut = true; cb(CLIENT_TIMEOUT_ABORT); }, s.timeout);
+			}
+			
+			// look for server aborts
+			function checkState() {
+				try {
+					var state = getDoc(io).readyState;
+					log('state = ' + state);
+					if (state.toLowerCase() == 'uninitialized')
+						setTimeout(checkState,50);
+				}
+				catch(e) {
+					log('Server abort: ' , e, ' (', e.name, ')');
+					cb(SERVER_ABORT);
+					timeoutHandle && clearTimeout(timeoutHandle);
+					timeoutHandle = undefined;
+				}
+			}
+
+			// add "extra" data to form if provided in options
+			var extraInputs = [];
+			try {
+				if (s.extraData) {
+					for (var n in s.extraData) {
+						extraInputs.push(
+							$('<input type="hidden" name="'+n+'" />').attr('value',s.extraData[n])
+								.appendTo(form)[0]);
 					}
 				}
-			);
-				
-		// return
-			return this;
-		
+
+				if (!s.iframeTarget) {
+					// add iframe to doc and submit the form
+					$io.appendTo('body');
+	                io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
+				}
+				setTimeout(checkState,15);
+				form.submit();
+			}
+			finally {
+				// reset attrs and remove "extra" input elements
+				form.setAttribute('action',a);
+				if(t) {
+					form.setAttribute('target', t);
+				} else {
+					$form.removeAttr('target');
+				}
+				$(extraInputs).remove();
+			}
 		}
+
+		if (s.forceSync) {
+			doSubmit();
+		}
+		else {
+			setTimeout(doSubmit, 10); // this lets dom updates render
+		}
+
+		var data, doc, domCheckCount = 50, callbackProcessed;
+
+		function cb(e) {
+			if (xhr.aborted || callbackProcessed) {
+				return;
+			}
+			try {
+				doc = getDoc(io);
+			}
+			catch(ex) {
+				log('cannot access response document: ', ex);
+				e = SERVER_ABORT;
+			}
+			if (e === CLIENT_TIMEOUT_ABORT && xhr) {
+				xhr.abort('timeout');
+				return;
+			}
+			else if (e == SERVER_ABORT && xhr) {
+				xhr.abort('server abort');
+				return;
+			}
+
+			if (!doc || doc.location.href == s.iframeSrc) {
+				// response not received yet
+				if (!timedOut)
+					return;
+			}
+            io.detachEvent ? io.detachEvent('onload', cb) : io.removeEventListener('load', cb, false);
+
+			var status = 'success', errMsg;
+			try {
+				if (timedOut) {
+					throw 'timeout';
+				}
+
+				var isXml = s.dataType == 'xml' || doc.XMLDocument || $.isXMLDoc(doc);
+				log('isXml='+isXml);
+				if (!isXml && window.opera && (doc.body == null || doc.body.innerHTML == '')) {
+					if (--domCheckCount) {
+						// in some browsers (Opera) the iframe DOM is not always traversable when
+						// the onload callback fires, so we loop a bit to accommodate
+						log('requeing onLoad callback, DOM not available');
+						setTimeout(cb, 250);
+						return;
+					}
+					// let this fall through because server response could be an empty document
+					//log('Could not access iframe DOM after mutiple tries.');
+					//throw 'DOMException: not available';
+				}
+
+				//log('response detected');
+                var docRoot = doc.body ? doc.body : doc.documentElement;
+                xhr.responseText = docRoot ? docRoot.innerHTML : null;
+				xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
+				if (isXml)
+					s.dataType = 'xml';
+				xhr.getResponseHeader = function(header){
+					var headers = {'content-type': s.dataType};
+					return headers[header];
+				};
+                // support for XHR 'status' & 'statusText' emulation :
+                if (docRoot) {
+                    xhr.status = Number( docRoot.getAttribute('status') ) || xhr.status;
+                    xhr.statusText = docRoot.getAttribute('statusText') || xhr.statusText;
+                }
+
+				var dt = (s.dataType || '').toLowerCase();
+				var scr = /(json|script|text)/.test(dt);
+				if (scr || s.textarea) {
+					// see if user embedded response in textarea
+					var ta = doc.getElementsByTagName('textarea')[0];
+					if (ta) {
+						xhr.responseText = ta.value;
+                        // support for XHR 'status' & 'statusText' emulation :
+                        xhr.status = Number( ta.getAttribute('status') ) || xhr.status;
+                        xhr.statusText = ta.getAttribute('statusText') || xhr.statusText;
+					}
+					else if (scr) {
+						// account for browsers injecting pre around json response
+						var pre = doc.getElementsByTagName('pre')[0];
+						var b = doc.getElementsByTagName('body')[0];
+						if (pre) {
+							xhr.responseText = pre.textContent ? pre.textContent : pre.innerText;
+						}
+						else if (b) {
+							xhr.responseText = b.textContent ? b.textContent : b.innerText;
+						}
+					}
+				}
+				else if (dt == 'xml' && !xhr.responseXML && xhr.responseText != null) {
+					xhr.responseXML = toXml(xhr.responseText);
+				}
+
+                try {
+                    data = httpData(xhr, dt, s);
+                }
+                catch (e) {
+                    status = 'parsererror';
+                    xhr.error = errMsg = (e || status);
+                }
+			}
+			catch (e) {
+				log('error caught: ',e);
+				status = 'error';
+                xhr.error = errMsg = (e || status);
+			}
+
+			if (xhr.aborted) {
+				log('upload aborted');
+				status = null;
+			}
+
+            if (xhr.status) { // we've set xhr.status
+                status = (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) ? 'success' : 'error';
+            }
+
+			// ordering of these callbacks/triggers is odd, but that's how $.ajax does it
+			if (status === 'success') {
+				s.success && s.success.call(s.context, data, 'success', xhr);
+				g && $.event.trigger("ajaxSuccess", [xhr, s]);
+			}
+            else if (status) {
+				if (errMsg == undefined)
+					errMsg = xhr.statusText;
+				s.error && s.error.call(s.context, xhr, status, errMsg);
+				g && $.event.trigger("ajaxError", [xhr, s, errMsg]);
+            }
+
+			g && $.event.trigger("ajaxComplete", [xhr, s]);
+
+			if (g && ! --$.active) {
+				$.event.trigger("ajaxStop");
+			}
+
+			s.complete && s.complete.call(s.context, xhr, status);
+
+			callbackProcessed = true;
+			if (s.timeout)
+				clearTimeout(timeoutHandle);
+
+			// clean up
+			setTimeout(function() {
+				if (!s.iframeTarget)
+					$io.remove();
+				xhr.responseXML = null;
+			}, 100);
+		}
+
+		var toXml = $.parseXML || function(s, doc) { // use parseXML if available (jQuery 1.5+)
+			if (window.ActiveXObject) {
+				doc = new ActiveXObject('Microsoft.XMLDOM');
+				doc.async = 'false';
+				doc.loadXML(s);
+			}
+			else {
+				doc = (new DOMParser()).parseFromString(s, 'text/xml');
+			}
+			return (doc && doc.documentElement && doc.documentElement.nodeName != 'parsererror') ? doc : null;
+		};
+		var parseJSON = $.parseJSON || function(s) {
+			return window['eval']('(' + s + ')');
+		};
+
+		var httpData = function( xhr, type, s ) { // mostly lifted from jq1.4.4
+
+			var ct = xhr.getResponseHeader('content-type') || '',
+				xml = type === 'xml' || !type && ct.indexOf('xml') >= 0,
+				data = xml ? xhr.responseXML : xhr.responseText;
+
+			if (xml && data.documentElement.nodeName === 'parsererror') {
+				$.error && $.error('parsererror');
+			}
+			if (s && s.dataFilter) {
+				data = s.dataFilter(data, type);
+			}
+			if (typeof data === 'string') {
+				if (type === 'json' || !type && ct.indexOf('json') >= 0) {
+					data = parseJSON(data);
+				} else if (type === "script" || !type && ct.indexOf("javascript") >= 0) {
+					$.globalEval(data);
+				}
+			}
+			return data;
+		};
+	}
+};
+
+/**
+ * ajaxForm() provides a mechanism for fully automating form submission.
+ *
+ * The advantages of using this method instead of ajaxSubmit() are:
+ *
+ * 1: This method will include coordinates for <input type="image" /> elements (if the element
+ *	is used to submit the form).
+ * 2. This method will include the submit element's name/value data (for the element that was
+ *	used to submit the form).
+ * 3. This method binds the submit() method to the form for you.
+ *
+ * The options argument for ajaxForm works exactly as it does for ajaxSubmit.  ajaxForm merely
+ * passes the options argument along after properly binding events for submit elements and
+ * the form itself.
+ */
+$.fn.ajaxForm = function(options) {
+	// in jQuery 1.3+ we can fix mistakes with the ready state
+	if (this.length === 0) {
+		var o = { s: this.selector, c: this.context };
+		if (!$.isReady && o.s) {
+			log('DOM not ready, queuing ajaxForm');
+			$(function() {
+				$(o.s,o.c).ajaxForm(options);
+			});
+			return this;
+		}
+		// is your DOM ready?  http://docs.jquery.com/Tutorials:Introducing_$(document).ready()
+		log('terminating; zero elements found by selector' + ($.isReady ? '' : ' (DOM not ready)'));
+		return this;
+	}
+
+	return this.ajaxFormUnbind().bind('submit.form-plugin', function(e) {
+		if (!e.isDefaultPrevented()) { // if event has been canceled, don't proceed
+			e.preventDefault();
+			$(this).ajaxSubmit(options);
+		}
+	}).bind('click.form-plugin', function(e) {
+		var target = e.target;
+		var $el = $(target);
+		if (!($el.is(":submit,input:image"))) {
+			// is this a child element of the submit el?  (ex: a span within a button)
+			var t = $el.closest(':submit');
+			if (t.length == 0) {
+				return;
+			}
+			target = t[0];
+		}
+		var form = this;
+		form.clk = target;
+		if (target.type == 'image') {
+			if (e.offsetX != undefined) {
+				form.clk_x = e.offsetX;
+				form.clk_y = e.offsetY;
+			} else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
+				var offset = $el.offset();
+				form.clk_x = e.pageX - offset.left;
+				form.clk_y = e.pageY - offset.top;
+			} else {
+				form.clk_x = e.pageX - target.offsetLeft;
+				form.clk_y = e.pageY - target.offsetTop;
+			}
+		}
+		// clear form vars
+		setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100);
+	});
+};
+
+// ajaxFormUnbind unbinds the event handlers that were bound by ajaxForm
+$.fn.ajaxFormUnbind = function() {
+	return this.unbind('submit.form-plugin click.form-plugin');
+};
+
+/**
+ * formToArray() gathers form element data into an array of objects that can
+ * be passed to any of the following ajax functions: $.get, $.post, or load.
+ * Each object in the array has both a 'name' and 'value' property.  An example of
+ * an array for a simple login form might be:
+ *
+ * [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
+ *
+ * It is this array that is passed to pre-submit callback functions provided to the
+ * ajaxSubmit() and ajaxForm() methods.
+ */
+$.fn.formToArray = function(semantic) {
+	var a = [];
+	if (this.length === 0) {
+		return a;
+	}
+
+	var form = this[0];
+	var els = semantic ? form.getElementsByTagName('*') : form.elements;
+	if (!els) {
+		return a;
+	}
+
+	var i,j,n,v,el,max,jmax;
+	for(i=0, max=els.length; i < max; i++) {
+		el = els[i];
+		n = el.name;
+		if (!n) {
+			continue;
+		}
+
+		if (semantic && form.clk && el.type == "image") {
+			// handle image inputs on the fly when semantic == true
+			if(!el.disabled && form.clk == el) {
+				a.push({name: n, value: $(el).val()});
+				a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
+			}
+			continue;
+		}
+
+		v = $.fieldValue(el, true);
+		if (v && v.constructor == Array) {
+			for(j=0, jmax=v.length; j < jmax; j++) {
+				a.push({name: n, value: v[j]});
+			}
+		}
+		else if (v !== null && typeof v != 'undefined') {
+			a.push({name: n, value: v});
+		}
+	}
+
+	if (!semantic && form.clk) {
+		// input type=='image' are not found in elements array! handle it here
+		var $input = $(form.clk), input = $input[0];
+		n = input.name;
+		if (n && !input.disabled && input.type == 'image') {
+			a.push({name: n, value: $input.val()});
+			a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
+		}
+	}
+	return a;
+};
+
+/**
+ * Serializes form data into a 'submittable' string. This method will return a string
+ * in the format: name1=value1&amp;name2=value2
+ */
+$.fn.formSerialize = function(semantic) {
+	//hand off to jQuery.param for proper encoding
+	return $.param(this.formToArray(semantic));
+};
+
+/**
+ * Serializes all field elements in the jQuery object into a query string.
+ * This method will return a string in the format: name1=value1&amp;name2=value2
+ */
+$.fn.fieldSerialize = function(successful) {
+	var a = [];
+	this.each(function() {
+		var n = this.name;
+		if (!n) {
+			return;
+		}
+		var v = $.fieldValue(this, successful);
+		if (v && v.constructor == Array) {
+			for (var i=0,max=v.length; i < max; i++) {
+				a.push({name: n, value: v[i]});
+			}
+		}
+		else if (v !== null && typeof v != 'undefined') {
+			a.push({name: this.name, value: v});
+		}
+	});
+	//hand off to jQuery.param for proper encoding
+	return $.param(a);
+};
+
+/**
+ * Returns the value(s) of the element in the matched set.  For example, consider the following form:
+ *
+ *  <form><fieldset>
+ *	  <input name="A" type="text" />
+ *	  <input name="A" type="text" />
+ *	  <input name="B" type="checkbox" value="B1" />
+ *	  <input name="B" type="checkbox" value="B2"/>
+ *	  <input name="C" type="radio" value="C1" />
+ *	  <input name="C" type="radio" value="C2" />
+ *  </fieldset></form>
+ *
+ *  var v = $(':text').fieldValue();
+ *  // if no values are entered into the text inputs
+ *  v == ['','']
+ *  // if values entered into the text inputs are 'foo' and 'bar'
+ *  v == ['foo','bar']
+ *
+ *  var v = $(':checkbox').fieldValue();
+ *  // if neither checkbox is checked
+ *  v === undefined
+ *  // if both checkboxes are checked
+ *  v == ['B1', 'B2']
+ *
+ *  var v = $(':radio').fieldValue();
+ *  // if neither radio is checked
+ *  v === undefined
+ *  // if first radio is checked
+ *  v == ['C1']
+ *
+ * The successful argument controls whether or not the field element must be 'successful'
+ * (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
+ * The default value of the successful argument is true.  If this value is false the value(s)
+ * for each element is returned.
+ *
+ * Note: This method *always* returns an array.  If no valid value can be determined the
+ *	   array will be empty, otherwise it will contain one or more values.
+ */
+$.fn.fieldValue = function(successful) {
+	for (var val=[], i=0, max=this.length; i < max; i++) {
+		var el = this[i];
+		var v = $.fieldValue(el, successful);
+		if (v === null || typeof v == 'undefined' || (v.constructor == Array && !v.length)) {
+			continue;
+		}
+		v.constructor == Array ? $.merge(val, v) : val.push(v);
+	}
+	return val;
+};
+
+/**
+ * Returns the value of the field element.
+ */
+$.fieldValue = function(el, successful) {
+	var n = el.name, t = el.type, tag = el.tagName.toLowerCase();
+	if (successful === undefined) {
+		successful = true;
+	}
+
+	if (successful && (!n || el.disabled || t == 'reset' || t == 'button' ||
+		(t == 'checkbox' || t == 'radio') && !el.checked ||
+		(t == 'submit' || t == 'image') && el.form && el.form.clk != el ||
+		tag == 'select' && el.selectedIndex == -1)) {
+			return null;
+	}
+
+	if (tag == 'select') {
+		var index = el.selectedIndex;
+		if (index < 0) {
+			return null;
+		}
+		var a = [], ops = el.options;
+		var one = (t == 'select-one');
+		var max = (one ? index+1 : ops.length);
+		for(var i=(one ? index : 0); i < max; i++) {
+			var op = ops[i];
+			if (op.selected) {
+				var v = op.value;
+				if (!v) { // extra pain for IE...
+					v = (op.attributes && op.attributes['value'] && !(op.attributes['value'].specified)) ? op.text : op.value;
+				}
+				if (one) {
+					return v;
+				}
+				a.push(v);
+			}
+		}
+		return a;
+	}
+	return $(el).val();
+};
+
+/**
+ * Clears the form data.  Takes the following actions on the form's input fields:
+ *  - input text fields will have their 'value' property set to the empty string
+ *  - select elements will have their 'selectedIndex' property set to -1
+ *  - checkbox and radio inputs will have their 'checked' property set to false
+ *  - inputs of type submit, button, reset, and hidden will *not* be effected
+ *  - button elements will *not* be effected
+ */
+$.fn.clearForm = function(includeHidden) {
+	return this.each(function() {
+		$('input,select,textarea', this).clearFields(includeHidden);
+	});
+};
+
+/**
+ * Clears the selected form elements.
+ */
+$.fn.clearFields = $.fn.clearInputs = function(includeHidden) {
+	var re = /^(?:color|date|datetime|email|month|number|password|range|search|tel|text|time|url|week)$/i; // 'hidden' is not in this list
+	return this.each(function() {
+		var t = this.type, tag = this.tagName.toLowerCase();
+		if (re.test(t) || tag == 'textarea' || (includeHidden && /hidden/.test(t)) ) {
+			this.value = '';
+		}
+		else if (t == 'checkbox' || t == 'radio') {
+			this.checked = false;
+		}
+		else if (tag == 'select') {
+			this.selectedIndex = -1;
+		}
+	});
+};
+
+/**
+ * Resets the form data.  Causes all form elements to be reset to their original value.
+ */
+$.fn.resetForm = function() {
+	return this.each(function() {
+		// guard against an input with the name of 'reset'
+		// note that IE reports the reset function as an 'object'
+		if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType)) {
+			this.reset();
+		}
+	});
+};
+
+/**
+ * Enables or disables any matching elements.
+ */
+$.fn.enable = function(b) {
+	if (b === undefined) {
+		b = true;
+	}
+	return this.each(function() {
+		this.disabled = !b;
+	});
+};
+
+/**
+ * Checks/unchecks any matching checkboxes or radio buttons and
+ * selects/deselects and matching option elements.
+ */
+$.fn.selected = function(select) {
+	if (select === undefined) {
+		select = true;
+	}
+	return this.each(function() {
+		var t = this.type;
+		if (t == 'checkbox' || t == 'radio') {
+			this.checked = select;
+		}
+		else if (this.tagName.toLowerCase() == 'option') {
+			var $sel = $(this).parent('select');
+			if (select && $sel[0] && $sel[0].type == 'select-one') {
+				// deselect all other options
+				$sel.find('option').selected(false);
+			}
+			this.selected = select;
+		}
+	});
+};
+
+// expose debug var
+$.fn.ajaxSubmit.debug = false;
+
+// helper fn for console logging
+function log() {
+	if (!$.fn.ajaxSubmit.debug) 
+		return;
+	var msg = '[jquery.form] ' + Array.prototype.join.call(arguments,'');
+	if (window.console && window.console.log) {
+		window.console.log(msg);
+	}
+	else if (window.opera && window.opera.postError) {
+		window.opera.postError(msg);
+	}
+};
+
+})(jQuery);

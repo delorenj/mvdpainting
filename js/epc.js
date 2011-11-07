@@ -164,56 +164,20 @@ EPC = function() {
       }, function(e) {
           $(this).css("color", "#e7e7e7").parent().css("background-color", "#0b0b0b");
       });     
-      
-      $('#gallery').orbit({
-       animation: 'fade',
-       animationSpeed: 800,
-       timer: true,
-       advanceSpeed: 4000,
-       pauseOnHover: false,
-       startClockOnMouseOut: true,
-       startClockOnMouseOutAfter: 1000,
-       directionalNav: false,
-       captions: false,
-       captionAnimation: 'slideOpen',
-       captionAnimationSpeed: 800,
-       bullets: false,
-       bulletThumbs: false,
-       bulletThumbLocation: 'images/thumbs/'
-      });      
-      
-      $(".timer").hide();
-      $("select").selectmenu();
-      $("input[name='date']").datepicker();
-      $(".ui-datepicker").css("display", "none");
-      $("button").button();
-      $("select[name='contact']").bind("change", function() {
-        switch($(this).val()) {
-          case "Phone" :
-            $("#email").slideUp("slow", function() {
-              $("#phone").slideDown("slow");
-            });
-            break;
-            
-          case "Email" :
-            $("#phone").slideUp("slow", function() {
-              $("#email").slideDown("slow");
-            });
-            break;     
-          
-          default :
-            $("#phone, #email").slideUp("slow");
-        }
-      });   
-      $("#submit").click(function() {
-        $("#flash").slideDown("fast", function() {
-          setTimeout(function() {
-            $("#flash").fadeOut("slow");
-          },2000);
-        })
+    },
+    
+    setFieldError : function(field, msg) {
+      $("#" + field).removeClass("idleField").addClass("focusField").append("<span class='error'>" + msg + "</span>");
+    },
+    clearFieldErrors : function() {
+      $(".error").fadeOut("slow", function(){
+        $(this).remove();
+      });
+      $("#query-form").children(function() {
+        $(this).removeClass("focusField").addClass("idleField");
       })
-      $("#contact-middle").fadeIn("slow");
     }
+    
   }
 
 }();
@@ -249,6 +213,35 @@ jQuery(document).ready(function() {
       left: "-100px"
     });
     
+  });
+  
+  $("#submit-button").hover(function(){
+    $(this).css("backgroundPosition", "0px 44px");
+  }, function(){
+    $(this).css("backgroundPosition", "0px 0px");
+  }).click(function() {
+    $("#quote-form").submit();
+  });
+ 
+  $("#quote-form").ajaxForm({
+    resetForm: true,
+    beforeSubmit:   function(formData, jqForm, options) {
+      EPC.clearFieldErrors();
+      var queryString = $.param(formData); 
+      
+      if($("#name").val() == "Name") {
+        EPC.setFieldError("name", "You must enter your name");
+        return false;
+      }
+      
+      // here we could return false to prevent the form from being submitted; 
+      // returning anything other than false will allow the form submit to continue 
+      return true; 
+    },
+    success: function(responseText, statusText, xhr, $form) {
+          alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+        '\n\nThe output div should have already been updated with the responseText.'); 
+    }
   });
   
   $("img.bw")

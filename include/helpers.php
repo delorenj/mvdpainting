@@ -87,28 +87,16 @@ function getHead($fonts = true) {
   $html =
   ' <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="css/reset.css" type="text/css" rel="stylesheet"></link>
-    <link href="css/dot-luv/jquery.ui.css" type="text/css" rel="stylesheet"></link>    
-    <link type="text/css" rel="stylesheet" href="css/orbit/orbit-1.2.3.css" />            
-    <link rel="Stylesheet" href="css/ui-selectmenu.css" type="text/css"></link>
     <link href="css/default.css" type="text/css" rel="stylesheet"></link>
     <link rel="shortcut icon" href="favicon.ico"></link>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.plugins.js"></script>
     <script type="text/javascript" src="js/signals.js"></script>
     <script type="text/javascript" src="js/crossroads.js"></script>
     <script type="text/javascript" src="js/hasher.js"></script>
-    <script type="text/javascript" src="js/epc.js"></script>';
-  
-  if($fonts) {
-    $html .= '
-    <link  href="http://fonts.googleapis.com/css?family=Bangers:regular" rel="stylesheet" type="text/css" ></link>      
-    <link  href="http://fonts.googleapis.com/css?family=La+Belle+Aurore:regular" rel="stylesheet" type="text/css" >
-    <link  href="http://fonts.googleapis.com/css?family=Just+Another+Hand:regular" rel="stylesheet" type="text/css" >
-    <link href="http://fonts.googleapis.com/css?family=Istok+Web:400,700" rel="stylesheet" type="text/css">
-    <link rel="Stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-darkness/jquery-ui.css" type="text/css"></link>';
-  }
-  
+    <script type="text/javascript" src="js/epc.js?3"></script>';
+    
   return $html;
 }
 

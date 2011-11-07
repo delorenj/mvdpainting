@@ -1,8 +1,6 @@
 <?php 
-require_once "include/LoremIpsum.class.php";
+ini_set("display_errors", "on");
 require_once "include/helpers.php";
-
-$gen = new LoremIpsumGenerator;
 
 $expaint_tiles = getBgTileImages("comps" . DIRECTORY_SEPARATOR . "exterior-paint");
 $inpaint_tiles = getBgTileImages("comps" . DIRECTORY_SEPARATOR . "interior-paint");
@@ -51,9 +49,10 @@ shuffle($tiles);
             <?php endforeach; ?>
           </ul>
         </div>
+        <div id="response"></div>
         <div id="quote" class="bg-grid-form">
-          <div class="form-block">
-            <form id="quote-form" action="quote.php" method="POST">
+          <form id="quote-form" action="quote.php" method="POST">          
+            <div class="form-block clearfix">
               <div class="l-form-block">
                 <h1>Contact Information</h1>
               </div>
@@ -72,8 +71,38 @@ shuffle($tiles);
                   </tbody>
                 </table>
               </div>
-            </form>
-          </div>
+            </div>
+            <div class="form-block clearfix">
+              <div class="l-form-block">
+                <h1>Services</h1>
+                <div class="sidenote">
+                  <p style="color: #871e1d; margin-bottom: 5px;">Questions?</p>
+                  <p><a href="#" onclick="EPC.onSectionMatch('contact');">Just Call Us!</a></p>
+                </div>
+              </div>
+              <div class="r-form-block">
+                <div id="service-header"></div>
+                <div class="check-list" style="margin-left: 45px;">
+                  <ul>
+                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Exterior Painting</li>
+                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Interior Painting</li>
+                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Wallpaper</li>
+                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Wallpaper Removal</li>
+                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Power Washing</li>
+                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Other</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="form-block clearfix">
+              <div class="l-form-block">
+                <h1>Finish</h1>
+              </div>
+              <div class="r-form-block">
+                <div id="submit-button"></div>
+              </div>
+            </div>            
+          </form>
         </div>
         <div id="exterior-paint" class="bg-grid-copy">
           <h1>Exterior Paint</h1>

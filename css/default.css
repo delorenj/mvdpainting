@@ -1,3 +1,24 @@
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+
 @font-face {
     font-family: 'HarabaraRegular';
     src: url('harabara-webfont.eot');
@@ -229,10 +250,12 @@ input {
   line-height: 1.13;  
 }
 
-button {
-  margin-left: 5px;
-  width: 250px;
-  height: 35px;
+#submit-button {
+  background-image: url("../images/submit.png");
+  margin-left: 0px;
+  width: 153px;
+  height: 44px;
+  cursor: pointer;
 }
 
 select {
@@ -368,10 +391,14 @@ ul.menu li a {
   top: 30px;
   left: 10%;
   height: 400px;
+  color: #f1f1f1;
+  font-family: 'HarabaraRegular';
+  font-size: 1.2em;
 }
 
 .form-block {
   width: 800px;
+  margin-bottom: 30px;
 }
 
 .l-form-block, .r-form-block {
@@ -385,8 +412,29 @@ ul.menu li a {
   width: 30%;
 }
 
+.check-list {
+  font-family: arial, sans-serif;
+}
+
 .r-form-block {
   width: 70%;
+}
+
+.sidenote {
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+.sidenote a {
+  font-family:inherit;
+  font-size :inherit;
+  color: inherit;
+}
+
+#service-header {
+  width: 500px;
+  height: 53px;
+  background-image: url('../images/service-header.png');
 }
 
 input {
