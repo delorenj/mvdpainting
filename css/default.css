@@ -397,8 +397,9 @@ ul.menu li a {
 }
 
 .form-block {
+  font-family: arial;
   width: 800px;
-  margin-bottom: 30px;
+  margin-bottom: 45px;
 }
 
 .l-form-block, .r-form-block {
@@ -421,14 +422,18 @@ ul.menu li a {
 }
 
 .sidenote {
-  margin-top: 15px;
-  font-size: 18px;
+  margin-top: 20px;
+  font-size: 20px;
 }
 
 .sidenote a {
-  font-family:inherit;
-  font-size :inherit;
+  font-family:arial;
+  font-size :0.8em;
   color: inherit;
+}
+
+#quote {
+  left: 25% !important;
 }
 
 #service-header {

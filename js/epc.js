@@ -111,7 +111,7 @@ EPC = function() {
     shuffleTiles : function() {
       var cat = "home";
       hasher.setHash(cat);
-      $(".bg-grid-copy").fadeOut("slow");
+      $(".bg-grid-copy, .bg-grid-form").fadeOut("slow");
       EPC.setCopy(cat);
       $("li img.bw").stop().animate({"opacity": "1"}, "slow");
       $("#bg-grid li").stop().animate(
@@ -157,7 +157,7 @@ EPC = function() {
         $("#quote").fadeIn("slow");
       }, 1000);
     },
-
+    
     init : function() {
       $("#banner-menu li[class!='active'] a").hover(function(e){
           $(this).css("color", "#ffffff").parent().css("background-color", "#141414");
@@ -258,8 +258,9 @@ jQuery(document).ready(function() {
     })
     .click(function() {
       var cat = $(this).closest("li").attr("rel");
+      if(hasher.getHash() == cat) return;
       hasher.setHash(cat);
-      $(".bg-grid-copy").fadeOut("slow");
+      $(".bg-grid-copy, .bg-grid-form").fadeOut("slow");
       EPC.setCopy(cat);
       $("li[rel='" + cat + "'] img.bw").stop().animate(
         {
@@ -309,7 +310,7 @@ jQuery(document).ready(function() {
       }, 3000);
       setTimeout(function() {
         var rel = $("#img-1").attr("rel");
-        $(".bg-grid-copy").fadeOut();
+        $(".bg-grid-copy, .bg-grid-form").fadeOut();
         $("#" + rel).fadeIn("slow");
       }, 3500);
     });

@@ -70,6 +70,14 @@ shuffle($tiles);
                     </tr>
                   </tbody>
                 </table>
+                <div class="clearfix" style="position: relative; left: 30px; width: 350px; left: 30px;">
+                  <div style="float:left">
+                    <input type="checkbox" name="preference" style="width:auto"/>I prefer email
+                  </div>
+                  <div style="float:right">
+                    <input type="checkbox" name="preference" style="width: auto"/>I prefer phone
+                  </div>                  
+                </div>
               </div>
             </div>
             <div class="form-block clearfix">
