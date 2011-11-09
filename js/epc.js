@@ -140,6 +140,10 @@ EPC = function() {
     },
 
     initQuote : function() {
+      var service = hasher.getHash();
+      $("input[name='" + service + "']").attr("checked", "checked");
+      console.log("service: " + service);
+      console.log("input[name='" + service + "']")
       var cat = "quote";
       hasher.setHash(cat);
       $(".bg-grid-copy").fadeOut("slow");
@@ -249,7 +253,7 @@ jQuery(document).ready(function() {
       var cat = $(this).closest("li").attr("rel");
       if(cat == EPC.getCopy()) {
         $("li[rel='" + cat + "'] img.bw").stop().animate({"opacity": "0"}, "slow");
-      } else {
+      }else {
         $(this).stop().animate({"opacity": "0"}, "slow");
       }
     }, function() {

@@ -72,10 +72,10 @@ shuffle($tiles);
                 </table>
                 <div class="clearfix" style="position: relative; left: 30px; width: 350px; left: 30px;">
                   <div style="float:left">
-                    <input type="checkbox" name="preference" style="width:auto"/>I prefer email
+                    <input type="checkbox" name="prefer-email" id="prefer-email" style="width:auto"/>I prefer email
                   </div>
                   <div style="float:right">
-                    <input type="checkbox" name="preference" style="width: auto"/>I prefer phone
+                    <input type="checkbox" name="prefer-phone" id="prefer-phone" style="width: auto"/>I prefer phone
                   </div>                  
                 </div>
               </div>
@@ -92,12 +92,12 @@ shuffle($tiles);
                 <div id="service-header"></div>
                 <div class="check-list" style="margin-left: 45px;">
                   <ul>
-                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Exterior Painting</li>
-                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Interior Painting</li>
-                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Wallpaper</li>
-                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Wallpaper Removal</li>
-                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Power Washing</li>
-                    <li><input type="checkbox" name="service-check" style="width: 50px;"/>Other</li>
+                    <li><input type="checkbox" name="exterior-painting" style="width: 50px;"/>Exterior Painting</li>
+                    <li><input type="checkbox" name="interior-painting" style="width: 50px;"/>Interior Painting</li>
+                    <li><input type="checkbox" name="wallpaper" style="width: 50px;"/>Wallpaper</li>
+                    <li><input type="checkbox" name="wallpaper-removal" style="width: 50px;"/>Wallpaper Removal</li>
+                    <li><input type="checkbox" name="power-washing" style="width: 50px;"/>Power Washing</li>
+                    <li><input type="checkbox" name="other" style="width: 50px;"/>Other</li>
                   </ul>
                 </div>
               </div>
