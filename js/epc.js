@@ -11,8 +11,8 @@ EPC = function() {
       } else if(section == "quote") {
         EPC.initQuote();
       } else if(section == "contact") {
-        alert("contact");
       } else {
+        EPC.setCopy(section);
         $("li[rel='" + section + "']:first img.bw").click();
       }      
     },
@@ -142,8 +142,6 @@ EPC = function() {
     initQuote : function() {
       var service = hasher.getHash();
       $("input[name='" + service + "']").attr("checked", "checked");
-      console.log("service: " + service);
-      console.log("input[name='" + service + "']")
       var cat = "quote";
       hasher.setHash(cat);
       $(".bg-grid-copy").fadeOut("slow");
@@ -193,7 +191,8 @@ jQuery(document).ready(function() {
   $(window).resize(function() {
     EPC.centerTiles();
   });
-  
+
+
   $('input[type="text"]').addClass("idleField");
 	$('input[type="text"]').focus(function() {
 		$(this).removeClass("idleField").addClass("focusField");
@@ -207,6 +206,7 @@ jQuery(document).ready(function() {
       left: "0px"
     });
   });
+
   
   $('input[type="text"]').blur(function() {
     $(this).removeClass("focusField").addClass("idleField");
@@ -218,7 +218,39 @@ jQuery(document).ready(function() {
     });
     
   });
+
+	$("#phone").focus(function() {
+		$(this).removeClass("idleField").addClass("focusField");
+      if (this.value == this.defaultValue){
+        this.value = '';
+      }
+      if(this.value != this.defaultValue){
+        this.select();
+      }
+    $(this).parent().find("span").animate({
+      left: "0px"
+    });
+    $(this).mask("(999)-999-9999");
+  });
+
   
+  $('#phone').blur(function() {
+    $(this).unmask();    
+    $(this).removeClass("focusField").addClass("idleField");
+    if ($.trim(this.value) == ''){
+      this.value = (this.defaultValue ? this.defaultValue : '');
+    }
+    $(this).parent().find("span").animate({
+      left: "-100px"
+    }, {
+      complete: function() {
+        if(($("#phone").val() == "")) {
+          $("#phone").val("Phone Number");
+        }
+      }
+    });
+  });
+
   $("#submit-button").hover(function(){
     $(this).css("backgroundPosition", "0px 44px");
   }, function(){
@@ -238,6 +270,17 @@ jQuery(document).ready(function() {
         return false;
       }
       
+      if((($("#email").val() == "Email"))) {
+        EPC.setFieldError("email", "Don't worry, we don't send spam");
+        return false;
+      }
+            
+      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if(!re.test($("#email").val())) {
+        EPC.setFieldError("email", "Please enter a valid email address");
+        return false;
+      }
+  
       // here we could return false to prevent the form from being submitted; 
       // returning anything other than false will allow the form submit to continue 
       return true; 
@@ -247,7 +290,7 @@ jQuery(document).ready(function() {
         '\n\nThe output div should have already been updated with the responseText.'); 
     }
   });
-  
+
   $("img.bw")
     .hover(function() {
       var cat = $(this).closest("li").attr("rel");
