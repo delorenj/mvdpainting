@@ -169,7 +169,7 @@ EPC = function() {
     },
     
     setFieldError : function(field, msg) {
-      $("#" + field).removeClass("idleField").addClass("focusField").append("<span class='error'>" + msg + "</span>");
+      $("#" + field).removeClass("idleField").addClass("focusField").parent().append("<span class='error'>" + msg + "</span>");
     },
     clearFieldErrors : function() {
       $(".error").fadeOut("slow", function(){
@@ -202,7 +202,7 @@ jQuery(document).ready(function() {
       if(this.value != this.defaultValue){
         this.select();
       }
-    $(this).parent().find("span").animate({
+    $(this).parent().find("span.label").animate({
       left: "0px"
     });
   });
@@ -213,7 +213,7 @@ jQuery(document).ready(function() {
     if ($.trim(this.value) == ''){
       this.value = (this.defaultValue ? this.defaultValue : '');
     }
-    $(this).parent().find("span").animate({
+    $(this).parent().find("span.label").animate({
       left: "-100px"
     });
     
@@ -286,8 +286,22 @@ jQuery(document).ready(function() {
       return true; 
     },
     success: function(responseText, statusText, xhr, $form) {
-          alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
-        '\n\nThe output div should have already been updated with the responseText.'); 
+      
+//        $.blockUI({ css: { 
+//            border: '4px solid yellow', 
+//            padding: '25px', 
+//            backgroundColor: '#000', 
+//            '-webkit-border-radius': '10px', 
+//            '-moz-border-radius': '10px', 
+//            opacity: .5, 
+//            color: '#fff',
+//            message: "Thanks for you request!"
+//        } }); 
+      $.growlUI('Thanks for your request!', 'We will contact you shortly'); 
+      setTimeout($.unblockUI, 2000);       
+      setTimeout(function() {
+        EPC.onSectionMatch("home");
+      },2500);
     }
   });
 

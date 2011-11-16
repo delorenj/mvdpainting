@@ -92,8 +92,8 @@ shuffle($tiles);
                 <div id="service-header"></div>
                 <div class="check-list" style="margin-left: 45px;">
                   <ul>
-                    <li><input type="checkbox" name="exterior-painting" style="width: 50px;"/>Exterior Painting</li>
-                    <li><input type="checkbox" name="interior-painting" style="width: 50px;"/>Interior Painting</li>
+                    <li><input type="checkbox" name="exterior-paint" style="width: 50px;"/>Exterior Painting</li>
+                    <li><input type="checkbox" name="interior-paint" style="width: 50px;"/>Interior Painting</li>
                     <li><input type="checkbox" name="wallpaper" style="width: 50px;"/>Wallpaper</li>
                     <li><input type="checkbox" name="wallpaper-removal" style="width: 50px;"/>Wallpaper Removal</li>
                     <li><input type="checkbox" name="power-washing" style="width: 50px;"/>Power Washing</li>

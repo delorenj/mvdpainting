@@ -1,7 +1,8 @@
 <?php
+include 'Mail.php';
 
 $services = array();
-print_r($_POST);
+
 foreach($_POST as $param=>$val) {
   switch($param) {
     case "interior-painting":
@@ -15,15 +16,27 @@ foreach($_POST as $param=>$val) {
   }
 }
 
-print "Name: " . $_POST["name"] . "\r\n";
+$text = "Name: " . $_POST["name"] . "\r\n";
 
-echo "Email: " . $_POST["email"];
-print isset($_POST["prefer-email"]) ? " (ok to contact)" : "" . "\r\n";
+$text .= "Email: " . $_POST["email"];
+$text .= isset($_POST["prefer-email"]) ? " (ok to contact)\r\n" : "" . "\r\n";
 
 if($_POST["phone"] != "Phone Number") {
-  echo "Phone: " . $_POST["phone"];
-  print isset($_POST["prefer-phone"]) ? " (ok to contact)" : "" . "\r\n";
+  $text .= "Phone: " . $_POST["phone"];
+  $text .= isset($_POST["prefer-phone"]) ? " (ok to contact)\r\n" : "" . "\r\n";
 }
-print "\r\nServices: " . implode(", ", $services) . "\r\n";
+
+$text .= "\r\nServices: " . implode(", ", $services) . "\r\n";
+
+
+$to      = 'jaradd@gmail.com,mvdelorenzo@gmail.com';
+$subject = 'Quote Request';
+$message = $text;
+$headers = 'From: quotes@mvdpainting.com' . "\r\n" .
+    'Reply-To: jaradd@gmail.com' . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+
+mail($to, $subject, $message, $headers);
+
 
 ?>
