@@ -42,7 +42,7 @@ function getBgTileImages($dir) {
     if ($dh = opendir($basepath)) {
       while (($file = readdir($dh)) !== false) {
         $fullpath = $basepath . DIRECTORY_SEPARATOR . $file;
-        if((filetype($fullpath) != "dir") && ($file != ".") && ($file != "..")) {
+        if((filetype($fullpath) != "dir") && ($file != ".") && ($file != "..") && ($file != ".DS_Store")) {
           $images[] = preg_replace("/\\\\/", "/", IMAGE_URL . $dircomp[0] . DIRECTORY_SEPARATOR . $dircomp[1] . DIRECTORY_SEPARATOR . $file);
         }
       }
